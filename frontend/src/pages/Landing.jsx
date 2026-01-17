@@ -20,15 +20,20 @@ const Landing = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-obsidian" />
         
         <div className="relative z-10 text-center px-4 max-w-4xl">
-          <h1 
-            className="font-primary font-bold text-5xl md:text-7xl tracking-tighter uppercase text-white mb-4"
-            style={{ textShadow: '0 0 20px rgba(255,215,0,0.5)' }}
-            data-testid="landing-title"
-          >
-            WIN<span className="text-gold-500">PKR</span>
-          </h1>
+          <div className="relative inline-block mb-4">
+            <h1 
+              className="font-primary font-bold text-5xl md:text-7xl tracking-tighter uppercase text-white"
+              style={{ textShadow: '0 0 20px rgba(255,215,0,0.5)' }}
+              data-testid="landing-title"
+            >
+              WIN<span className="text-gold-500 relative">
+                PKR
+                <span className="absolute -bottom-4 right-0 text-base md:text-xl font-medium tracking-wider">HUB</span>
+              </span>
+            </h1>
+          </div>
           
-          <p className="text-xl md:text-2xl text-gray-300 mb-8 font-secondary">
+          <p className="text-xl md:text-2xl text-gray-300 mb-8 font-secondary mt-6">
             Pakistan's Premier Online Gambling Platform
           </p>
           
