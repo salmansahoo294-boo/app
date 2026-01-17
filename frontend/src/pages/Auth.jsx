@@ -115,7 +115,7 @@ const Auth = () => {
             {mode === 'login' ? 'Welcome Back' : 'Create Account'}
           </h1>
           <p className="text-gray-400 mb-6">
-            {mode === 'login' ? 'Login to your WinPKR account' : 'Join WinPKR and start winning'}
+            {mode === 'login' ? 'Login to your WINPKR HUB account' : 'Join WINPKR HUB and start winning'}
           </p>
 
           {/* Admin Toggle */}
