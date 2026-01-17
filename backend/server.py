@@ -30,7 +30,7 @@ async def root():
 
 @api_router.get("/health")
 async def health_check():
-    return {"status": "healthy", "service": "winpkr-api"}
+    return {"status": "healthy", "service": "winpkr-hub-api"}
 
 # Include all route modules
 api_router.include_router(auth_routes.router)
