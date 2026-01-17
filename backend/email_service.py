@@ -108,7 +108,7 @@ class EmailService:
     
     def send_deposit_approved_email(self, user_email: str, amount: float) -> bool:
         """Send deposit approval notification to user"""
-        subject = "✅ Deposit Approved - WINPKR HUB"
+        subject = "✅ Deposit Approved - WINPKRHUB"
         
         html_content = f"""
         <html>
