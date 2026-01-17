@@ -26,7 +26,7 @@ api_router = APIRouter(prefix="/api")
 # Health check
 @api_router.get("/")
 async def root():
-    return {"message": "WINPKR HUB API is running", "version": "1.0.0"}
+    return {"message": "WINPKRHUB API is running", "version": "1.0.0"}
 
 @api_router.get("/health")
 async def health_check():
