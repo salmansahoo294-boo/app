@@ -28,7 +28,7 @@ const Landing = () => {
             >
               WIN<span className="text-gold-500 relative">
                 PKR
-                <span className="absolute -bottom-4 right-0 text-base md:text-xl font-medium tracking-wider">HUB</span>
+                <span className="absolute -bottom-3 -right-1 text-sm md:text-lg font-semibold tracking-wide" style={{ fontWeight: 500 }}>HUB</span>
               </span>
             </h1>
           </div>
