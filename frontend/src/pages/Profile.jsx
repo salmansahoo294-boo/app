@@ -159,7 +159,7 @@ const Profile = () => {
         {profile?.referral_code && (
           <div className="backdrop-blur-xl bg-gradient-to-br from-neon-green/20 to-gold-500/20 border border-neon-green/30 rounded-xl p-6">
             <h3 className="font-primary font-bold text-lg text-white mb-2">Refer & Earn</h3>
-            <p className="text-gray-300 text-sm mb-4">Share your referral code and earn bonuses when friends join WINPKR HUB!</p>
+            <p className="text-gray-300 text-sm mb-4">Share your referral code and earn bonuses when friends join WINPKRHUB!</p>
             
             <div className="bg-black/30 border border-white/20 rounded-lg p-4">
               <p className="text-gray-400 text-xs mb-1">Your Referral Code</p>
