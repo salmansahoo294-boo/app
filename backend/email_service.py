@@ -108,7 +108,7 @@ class EmailService:
     
     def send_deposit_approved_email(self, user_email: str, amount: float) -> bool:
         """Send deposit approval notification to user"""
-        subject = "✅ Deposit Approved - WinPKR"
+        subject = "✅ Deposit Approved - WINPKR HUB"
         
         html_content = f"""
         <html>
@@ -117,7 +117,7 @@ class EmailService:
                     <h2 style="color: #00FF94;">Deposit Approved!</h2>
                     <p>Your deposit of <strong>PKR {amount:,.2f}</strong> has been approved and credited to your wallet.</p>
                     <p>You can now start playing your favorite games!</p>
-                    <p style="margin-top: 30px; color: #666; font-size: 12px;">Thank you for choosing WinPKR</p>
+                    <p style="margin-top: 30px; color: #666; font-size: 12px;">Thank you for choosing WINPKR HUB</p>
                 </div>
             </body>
         </html>
