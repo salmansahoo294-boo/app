@@ -59,7 +59,7 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("startup")
 async def startup_event():
-    logger.info("WinPKR API starting up...")
+    logger.info("WINPKRHUB API starting up...")
     # Create indexes
     await db.users.create_index("email", unique=True)
     await db.users.create_index("referral_code", unique=True)
