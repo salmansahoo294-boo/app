@@ -136,7 +136,7 @@ class EmailService:
                     <h2 style="color: #00FF94;">Withdrawal Processed!</h2>
                     <p>Your withdrawal of <strong>PKR {amount:,.2f}</strong> has been processed.</p>
                     <p>The amount will be transferred to your JazzCash number: <strong>{jazzcash_number}</strong></p>
-                    <p style="margin-top: 30px; color: #666; font-size: 12px;">Thank you for playing at WINPKR HUB</p>
+                    <p style="margin-top: 30px; color: #666; font-size: 12px;">Thank you for playing at WINPKRHUB</p>
                 </div>
             </body>
         </html>
