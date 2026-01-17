@@ -1,0 +1,165 @@
+{
+  "identity": {
+    "name": "E1",
+    "archetype": "The Anti-AI Designer",
+    "mission": "Create a visceral, high-stakes gambling experience that feels like a cyberpunk casino, not a spreadsheet.",
+    "principles": [
+      "Fusion over Imitation: Mix Luxury Casino with Cyberpunk Tech.",
+      "Emotion First: Every click must feel like a bet. Every win must feel explosive.",
+      "Darkness is the Canvas: Use deep blacks to make gold and neon pop.",
+      "Mobile First: The thumb is the controller. Bottom nav is king."
+    ]
+  },
+  "typography": {
+    "fonts": {
+      "primary": "Chakra Petch, sans-serif",
+      "secondary": "Inter, sans-serif",
+      "numbers": "Rajdhani, sans-serif"
+    },
+    "weights": {
+      "heading": "700",
+      "body": "400",
+      "bold": "600"
+    },
+    "usage": {
+      "h1": "font-primary font-bold text-4xl tracking-tighter uppercase text-white drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]",
+      "h2": "font-primary font-bold text-2xl tracking-tight text-white",
+      "h3": "font-primary font-semibold text-xl text-gray-200",
+      "body": "font-secondary text-base text-gray-400 leading-relaxed",
+      "caption": "font-secondary text-xs text-gray-500 uppercase tracking-widest",
+      "odds": "font-numbers font-bold text-lg text-neon-green"
+    }
+  },
+  "colors": {
+    "palette": {
+      "background": {
+        "default": "#050505",
+        "paper": "#0A0A0A",
+        "surface": "#121212"
+      },
+      "primary": {
+        "default": "#FFD700",
+        "hover": "#E5C100",
+        "foreground": "#000000"
+      },
+      "secondary": {
+        "default": "#00FF94",
+        "hover": "#00CC76",
+        "foreground": "#000000"
+      },
+      "accent": {
+        "default": "#FF0055",
+        "glow": "0 0 20px #FF0055"
+      },
+      "text": {
+        "primary": "#FFFFFF",
+        "secondary": "#A1A1AA",
+        "muted": "#52525B"
+      },
+      "border": {
+        "default": "rgba(255, 255, 255, 0.1)",
+        "active": "rgba(255, 215, 0, 0.5)"
+      }
+    },
+    "tailwind_config_extension": {
+      "colors": {
+        "obsidian": "#050505",
+        "gold": {
+          "400": "#FFE066",
+          "500": "#FFD700",
+          "600": "#E5C100"
+        },
+        "neon": {
+          "green": "#00FF94",
+          "red": "#FF0055",
+          "blue": "#00F0FF"
+        }
+      }
+    }
+  },
+  "layout": {
+    "spacing": {
+      "container_padding": "p-4 md:p-8",
+      "section_gap": "gap-8",
+      "card_padding": "p-6"
+    },
+    "grid": {
+      "bento_marketing": "grid grid-cols-1 md:grid-cols-12 gap-4",
+      "game_grid": "grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4"
+    },
+    "mobile": {
+      "bottom_nav_height": "h-16",
+      "safe_area_bottom": "pb-safe"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-gold-500 text-black font-bold uppercase tracking-wider hover:bg-gold-400 hover:shadow-[0_0_20px_rgba(255,215,0,0.4)] transition-all duration-300 rounded-sm skew-x-[-10deg]",
+      "secondary": "bg-transparent border border-gold-500/50 text-gold-500 hover:bg-gold-500/10 hover:border-gold-500 transition-all duration-300 rounded-sm",
+      "ghost": "text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+    },
+    "cards": {
+      "game_card": "group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-gold-500/50 transition-all duration-300",
+      "stat_card": "bg-obsidian border border-white/5 p-4 rounded-lg"
+    },
+    "inputs": {
+      "default": "bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-gold-500/50 focus:ring-1 focus:ring-gold-500/50 rounded-md"
+    },
+    "navigation": {
+      "bottom_bar": "fixed bottom-0 left-0 right-0 bg-obsidian/90 backdrop-blur-xl border-t border-white/10 z-50 flex justify-around items-center h-16"
+    }
+  },
+  "assets": {
+    "images": {
+      "hero_bg": "https://images.unsplash.com/photo-1561212001-d400282c6144?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "casino_chips": "https://images.unsplash.com/photo-1561102385-a6419d8a91c6?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "slots_neon": "https://images.unsplash.com/photo-1552749412-7bbae756acfc?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "cards_poker": "https://images.unsplash.com/photo-1561102427-0b1bb2138007?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "jackpot_machine": "https://images.unsplash.com/photo-1521059050443-41cbffd7bde5?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "abstract_texture": "https://images.unsplash.com/photo-1762258344624-52d8c3b74c66?crop=entropy&cs=srgb&fm=jpg&q=85"
+    },
+    "icons": {
+      "library": "lucide-react",
+      "style": "stroke-1"
+    }
+  },
+  "visual_enhancers": {
+    "glassmorphism": "backdrop-blur-xl bg-black/40 border border-white/10",
+    "neon_glow": "shadow-[0_0_15px_rgba(0,255,148,0.3)]",
+    "gold_glow": "shadow-[0_0_15px_rgba(255,215,0,0.3)]",
+    "gradients": {
+      "gold_rush": "bg-gradient-to-r from-gold-600 via-gold-500 to-gold-400",
+      "dark_void": "bg-gradient-to-b from-obsidian to-black"
+    }
+  },
+  "motion": {
+    "hover_lift": "hover:-translate-y-1 transition-transform duration-200",
+    "click_press": "active:scale-95 transition-transform duration-100",
+    "page_transition": {
+      "initial": { "opacity": 0, "y": 20 },
+      "animate": { "opacity": 1, "y": 0 },
+      "exit": { "opacity": 0, "y": -20 }
+    }
+  },
+  "accessibility": {
+    "contrast_check": "Ensure gold text is on dark black, not grey. Use white for body text.",
+    "touch_targets": "Minimum 44px for all mobile interactions."
+  },
+  "instructions_to_main_agent": [
+    "1. Install 'lucide-react' and 'framer-motion' immediately.",
+    "2. Update 'tailwind.config.js' with the colors defined in 'colors.tailwind_config_extension'.",
+    "3. Create a 'Layout' component that includes the Bottom Navigation for mobile.",
+    "4. Use the 'bento_marketing' grid for the Home Dashboard.",
+    "5. Apply 'glassmorphism' classes to all Cards and Modals.",
+    "6. Use 'Chakra Petch' (via Google Fonts) for all Headings.",
+    "7. Ensure all interactive elements have 'data-testid'.",
+    "8. DO NOT use default Shadcn styles. Override them with the 'components' styles defined here."
+  ],
+  "universal_guidelines": [
+    "Avoid 'AI Slop': No generic centered layouts.",
+    "Dark Mode Only: Force dark mode classes on the body.",
+    "Micro-interactions: Every button must have a hover and active state.",
+    "No Gradients on Text: Unless it's a very large headline.",
+    "Use 'sonner' for toasts."
+  ]
+}
