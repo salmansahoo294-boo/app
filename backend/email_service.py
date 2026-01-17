@@ -63,7 +63,7 @@ class EmailService:
                     </p>
                     
                     <p style="color: #666; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px; font-size: 12px;">
-                        This is an automated notification from WINPKR HUB Admin System.<br>
+                        This is an automated notification from WINPKRHUB Admin System.<br>
                         Please do not reply to this email.
                     </p>
                 </div>
@@ -96,7 +96,7 @@ class EmailService:
                     </p>
                     
                     <p style="color: #666; margin-top: 30px; border-top: 1px solid #ddd; padding-top: 20px; font-size: 12px;">
-                        This is an automated notification from WINPKR HUB Admin System.<br>
+                        This is an automated notification from WINPKRHUB Admin System.<br>
                         Please do not reply to this email.
                     </p>
                 </div>
