@@ -92,7 +92,7 @@ const AdminDashboard = () => {
       <div className="bg-gradient-to-b from-obsidian to-black border-b border-white/10 p-6">
         <div className="max-w-6xl mx-auto">
           <h1 className="font-primary font-bold text-2xl text-white" data-testid="admin-title">Admin Dashboard</h1>
-          <p className="text-gray-400 text-sm">Manage WINPKR HUB Platform</p>
+          <p className="text-gray-400 text-sm">Manage WINPKRHUB Platform</p>
         </div>
       </div>
 
