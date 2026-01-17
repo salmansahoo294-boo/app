@@ -127,7 +127,7 @@ class EmailService:
     
     def send_withdrawal_approved_email(self, user_email: str, amount: float, jazzcash_number: str) -> bool:
         """Send withdrawal approval notification to user"""
-        subject = "✅ Withdrawal Processed - WINPKR HUB"
+        subject = "✅ Withdrawal Processed - WINPKRHUB"
         
         html_content = f"""
         <html>
