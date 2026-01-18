@@ -1,17 +1,22 @@
 {
-  "buildCommand": "cd frontend && yarn build",
-  "outputDirectory": "frontend/build",
-  "devCommand": "cd frontend && yarn start",
-  "installCommand": "cd frontend && yarn install",
-  "framework": null,
-  "rewrites": [
+  "version": 2,
+  "builds": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://gamepro.preview.emergentagent.com/api/$1"
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://gamepro.preview.emergentagent.com/api/$1"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
     }
   ]
 }
