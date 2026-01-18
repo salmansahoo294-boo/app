@@ -1,7 +1,10 @@
-const { whenDev } = require('@craco/craco');
+const path = require('path');
 
 module.exports = {
   webpack: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
     configure: (webpackConfig) => {
       // Disable TypeScript type checking in production builds
       const typeCheckPlugin = webpackConfig.plugins.find(
