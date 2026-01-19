@@ -59,8 +59,7 @@
   },
   "resolutions": {
     "**/**/ajv": "6.12.6",
-    "**/**/ajv-keywords": "3.5.2",
-    "**/**/ajv-formats": "1.6.1"
+    "**/**/ajv-keywords": "3.5.2"
   },
   "scripts": {
     "start": "craco start",
