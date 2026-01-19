@@ -16,12 +16,27 @@ module.exports = {
         webpackConfig.plugins.splice(pluginIndex, 1);
       }
 
+      // Optimize for Vercel
+      if (process.env.VERCEL) {
+        webpackConfig.optimization = {
+          ...webpackConfig.optimization,
+          minimize: true,
+          moduleIds: 'deterministic',
+        };
+      }
+
       return webpackConfig;
     },
   },
   style: {
     postcss: {
       plugins: [require('tailwindcss'), require('autoprefixer')],
+    },
+  },
+  // Increase max memory for build
+  devServer: {
+    client: {
+      overlay: false,
     },
   },
 };
