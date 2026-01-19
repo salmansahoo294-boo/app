@@ -57,6 +57,10 @@
     "zod": "^3.24.4",
     "ajv": "6.12.6"
   },
+  "resolutions": {
+    "**/**/ajv": "6.12.6",
+    "**/**/ajv-keywords": "3.5.2"
+  },
   "scripts": {
     "start": "craco start",
     "build": "GENERATE_SOURCEMAP=false CI=false craco build",
