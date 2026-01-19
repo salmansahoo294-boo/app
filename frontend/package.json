@@ -58,8 +58,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
-    "vercel-build": "TSC_COMPILE_ON_ERROR=true SKIP_PREFLIGHT_CHECK=true craco build",
+    "build": "GENERATE_SOURCEMAP=false craco build",
+    "vercel-build": "GENERATE_SOURCEMAP=false craco build",
     "test": "craco test"
   },
   "browserslist": {
