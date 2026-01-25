@@ -7,16 +7,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        obsidian: "#050505",
-        gold: {
-          400: "#FFE066",
-          500: "#FFD700",
-          600: "#E5C100"
+        obsidian: {
+          DEFAULT: "#050505",
+          paper: "#0A0A0A",
+          subtle: "#121212"
         },
-        neon: {
-          green: "#00FF94",
-          red: "#FF0055",
-          blue: "#00F0FF"
+        gold: {
+          DEFAULT: "#D4AF37",
+          light: "#F4C430",
+          dark: "#AA8C2C"
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -53,7 +52,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        primary: ['Chakra Petch', 'sans-serif'],
+        primary: ['Playfair Display', 'serif'],
         secondary: ['Inter', 'sans-serif'],
         numbers: ['Rajdhani', 'sans-serif'],
       },

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=Inter:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600&family=Rajdhani:wght@500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -25,20 +25,20 @@ code {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 4%;
     --popover-foreground: 0 0% 98%;
-    --primary: 48 100% 50%;
+    --primary: 45 88% 51%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 156 100% 50%;
+    --secondary: 0 0% 100%;
     --secondary-foreground: 0 0% 0%;
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 63%;
-    --accent: 336 100% 50%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 45 88% 51%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 10%;
     --input: 0 0% 10%;
-    --ring: 48 100% 50%;
-    --radius: 0.5rem;
+    --ring: 45 88% 51%;
+    --radius: 1rem;
   }
 
   .dark {
@@ -48,19 +48,19 @@ code {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 4%;
     --popover-foreground: 0 0% 98%;
-    --primary: 48 100% 50%;
+    --primary: 45 88% 51%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 156 100% 50%;
+    --secondary: 0 0% 100%;
     --secondary-foreground: 0 0% 0%;
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 63%;
-    --accent: 336 100% 50%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 45 88% 51%;
+    --accent-foreground: 0 0% 0%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 10%;
     --input: 0 0% 10%;
-    --ring: 48 100% 50%;
+    --ring: 45 88% 51%;
   }
 }
 
@@ -116,10 +116,42 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #FFD700;
+  background: #D4AF37;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #E5C100;
+  background: #F4C430;
+}
+
+/* Premium animations */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(to right, transparent 0%, rgba(212, 175, 55, 0.1) 50%, transparent 100%);
+  background-size: 1000px 100%;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Gold glow effect */
+.gold-glow {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+.gold-glow:hover {
+  box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
 }
