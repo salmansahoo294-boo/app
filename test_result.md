@@ -101,3 +101,42 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+## user_problem_statement: "WINPKRHUB premium gambling UI (Phase 1) + phased build plan"
+## frontend:
+##   - task: "Premium Landing page redesign + branding WINPKR with HUB under PKR"
+##     implemented: true
+##     working: false
+##     file: "/app/frontend/src/pages/Landing.jsx"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: true
+##     status_history:
+##       - working: "NA"
+##         agent: "main"
+##         comment: "Rebuilt Landing with premium bento layout + fixed Tailwind compilation via craco postcss plugin config. Needs e2e UI test."
+##   - task: "Remove Vercel artifacts (.npmrc / vercel config)"
+##     implemented: true
+##     working: true
+##     file: "/app/frontend/.npmrc"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: false
+##     status_history:
+##       - working: true
+##         agent: "main"
+##         comment: "Removed frontend/.npmrc. No vercel.json present. yarn build passes."
+## metadata:
+##   created_by: "main_agent"
+##   version: "1.0"
+##   test_sequence: 1
+##   run_ui: true
+## test_plan:
+##   current_focus:
+##     - "Premium Landing page redesign + branding WINPKR with HUB under PKR"
+##   stuck_tasks: []
+##   test_all: false
+##   test_priority: "high_first"
+## agent_communication:
+##   - agent: "main"
+##     message: "Please run frontend e2e checks: Landing renders styled, CTA buttons navigate to /auth, login works, protected routing to /home works, and no blank/unstyled sections. Admin login redirect to /admin sanity."
