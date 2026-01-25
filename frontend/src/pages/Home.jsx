@@ -163,8 +163,8 @@ const Home = () => {
         </div>
 
         {/* Coming Soon Badge */}
-        <div className="bg-gradient-to-r from-neon-red/20 to-gold-500/20 border border-neon-red/30 rounded-lg p-4 text-center">
-          <p className="text-white font-semibold">🎮 More Games Coming Soon!</p>
+        <div className="bg-gradient-to-r from-red-500/15 to-gold/15 border border-red-500/30 rounded-xl p-4 text-center">
+          <p className="text-white font-semibold">More Games Coming Soon!</p>
           <p className="text-gray-400 text-sm mt-1">Stay tuned for Sports Betting, Live Casino & More</p>
         </div>
       </div>
