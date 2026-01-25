@@ -10,19 +10,10 @@ module.exports = {
       const typeCheckPlugin = webpackConfig.plugins.find(
         plugin => plugin.constructor.name === 'ForkTsCheckerWebpackPlugin'
       );
-      
+
       if (typeCheckPlugin) {
         const pluginIndex = webpackConfig.plugins.indexOf(typeCheckPlugin);
         webpackConfig.plugins.splice(pluginIndex, 1);
-      }
-
-      // Optimize for Vercel
-      if (process.env.VERCEL) {
-        webpackConfig.optimization = {
-          ...webpackConfig.optimization,
-          minimize: true,
-          moduleIds: 'deterministic',
-        };
       }
 
       return webpackConfig;
@@ -30,10 +21,13 @@ module.exports = {
   },
   style: {
     postcss: {
-      plugins: [require('tailwindcss'), require('autoprefixer')],
+      // Ensure Tailwind directives are compiled (CRA doesn't load postcss.config.js by default)
+      plugins: {
+        tailwindcss: {},
+        autoprefixer: {},
+      },
     },
   },
-  // Increase max memory for build
   devServer: {
     client: {
       overlay: false,
