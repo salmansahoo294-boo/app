@@ -179,7 +179,7 @@ ADMIN_EMAIL="" # Email to receive notifications
 
 ### Frontend (.env)
 ```
-REACT_APP_BACKEND_URL=https://gamepro.preview.emergentagent.com
+REACT_APP_BACKEND_URL=https://gamehub-550.preview.emergentagent.com
 WDS_SOCKET_PORT=443
 ENABLE_HEALTH_CHECK=false
 ```
