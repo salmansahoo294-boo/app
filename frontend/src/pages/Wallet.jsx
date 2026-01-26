@@ -7,16 +7,33 @@ import { Label } from '../components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import { ArrowDownCircle, ArrowUpCircle, Clock, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { PageShell } from '../components/PageShell';
+import { Skeleton } from '../components/ui/skeleton';
+import { EmptyState } from '../components/EmptyState';
 
-const Wallet = () => {
+const WalletStatusIcon = ({ status }) => {
+  switch (status) {
+    case 'pending':
+      return <Clock className="w-4 h-4 text-warning" />;
+    case 'approved':
+      return <CheckCircle className="w-4 h-4 text-neon-green" />;
+    case 'rejected':
+      return <XCircle className="w-4 h-4 text-neon-red" />;
+    default:
+      return null;
+  }
+};
+
+export default function Wallet() {
   const [searchParams] = useSearchParams();
   const initialTab = searchParams.get('tab') || 'balance';
-  
+
   const [balance, setBalance] = useState(null);
   const [deposits, setDeposits] = useState([]);
   const [withdrawals, setWithdrawals] = useState([]);
-  const [loading, setLoading] = useState(false);
-  
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
   const [depositForm, setDepositForm] = useState({ amount: '', jazzcash_number: '' });
   const [withdrawForm, setWithdrawForm] = useState({ amount: '', jazzcash_number: '' });
 
@@ -26,6 +43,7 @@ const Wallet = () => {
 
   const loadData = async () => {
     try {
+      setLoading(true);
       const [balanceRes, depositsRes, withdrawalsRes] = await Promise.all([
         userAPI.getWalletBalance(),
         paymentAPI.getDeposits({ limit: 20 }),
@@ -37,110 +55,118 @@ const Wallet = () => {
     } catch (error) {
       console.error('Error loading wallet data:', error);
       toast.error('Failed to load wallet data');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDeposit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
 
     try {
       await paymentAPI.createDeposit(depositForm);
-      toast.success('Deposit request submitted! Admin will review shortly.');
+      toast.success('Deposit initiated successfully.');
       setDepositForm({ amount: '', jazzcash_number: '' });
       loadData();
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Deposit request failed');
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
   const handleWithdraw = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
 
     try {
       await paymentAPI.createWithdrawal(withdrawForm);
-      toast.success('Withdrawal request submitted! Admin will review shortly.');
+      toast.success('Withdrawal initiated successfully.');
       setWithdrawForm({ amount: '', jazzcash_number: '' });
       loadData();
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Withdrawal request failed');
     } finally {
-      setLoading(false);
-    }
-  };
-
-  const StatusIcon = ({ status }) => {
-    switch (status) {
-      case 'pending': return <Clock className="w-4 h-4 text-yellow-500" />;
-      case 'approved': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'rejected': return <XCircle className="w-4 h-4 text-red-500" />;
-      default: return null;
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-obsidian pb-20">
-      {/* Header */}
-      <div className="bg-gradient-to-b from-obsidian to-black border-b border-white/10 p-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="font-primary font-bold text-2xl text-white" data-testid="wallet-title">Wallet</h1>
-          <p className="text-gray-400 text-sm">Manage your funds</p>
-        </div>
-      </div>
+    <PageShell title="Wallet" subtitle="PKR is the default currency for all transactions.">
+      <Tabs defaultValue={initialTab} className="w-full">
+        <TabsList className="grid w-full grid-cols-3 bg-white/5 border border-white/10 rounded-full" data-testid="wallet-tabs">
+          <TabsTrigger value="balance" data-testid="tab-balance">Balance</TabsTrigger>
+          <TabsTrigger value="deposit" data-testid="tab-deposit">Deposit</TabsTrigger>
+          <TabsTrigger value="withdraw" data-testid="tab-withdraw">Withdraw</TabsTrigger>
+        </TabsList>
 
-      <div className="max-w-4xl mx-auto p-4">
-        <Tabs defaultValue={initialTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-white/5 border border-white/10" data-testid="wallet-tabs">
-            <TabsTrigger value="balance" data-testid="tab-balance">Balance</TabsTrigger>
-            <TabsTrigger value="deposit" data-testid="tab-deposit">Deposit</TabsTrigger>
-            <TabsTrigger value="withdraw" data-testid="tab-withdraw">Withdraw</TabsTrigger>
-          </TabsList>
-
-          {/* Balance Tab */}
-          <TabsContent value="balance" className="space-y-4 mt-6">
-            <div className="backdrop-blur-xl bg-gradient-to-br from-gold-600 via-gold-500 to-gold-400 rounded-xl p-6">
-              <p className="text-black/70 text-sm font-medium mb-2">Total Balance</p>
-              <p className="font-numbers font-bold text-4xl text-black" data-testid="total-balance">
-                PKR {balance?.total_balance?.toLocaleString() || '0'}
-              </p>
-              
-              <div className="grid grid-cols-2 gap-4 mt-6 pt-4 border-t border-black/10">
-                <div>
-                  <p className="text-black/70 text-xs mb-1">Main Wallet</p>
-                  <p className="font-numbers font-bold text-black text-xl" data-testid="main-balance">
-                    PKR {balance?.wallet_balance?.toLocaleString() || '0'}
-                  </p>
+        {/* Balance Tab */}
+        <TabsContent value="balance" className="space-y-4 mt-6">
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+            <div className="absolute inset-0 opacity-60 bg-gradient-to-br from-gold/15 via-transparent to-transparent" />
+            <div className="relative">
+              <div className="text-xs uppercase tracking-widest text-white/50">Total Balance</div>
+              {loading ? (
+                <Skeleton className="mt-3 h-10 w-64" />
+              ) : (
+                <div className="mt-2 font-numbers text-4xl text-white" data-testid="total-balance">
+                  PKR {balance?.total_balance?.toLocaleString() || '0'}
                 </div>
-                <div>
-                  <p className="text-black/70 text-xs mb-1">Bonus</p>
-                  <p className="font-numbers font-bold text-black text-xl" data-testid="bonus-balance">
-                    PKR {balance?.bonus_balance?.toLocaleString() || '0'}
-                  </p>
+              )}
+
+              <div className="mt-6 grid grid-cols-2 gap-4">
+                <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+                  <div className="text-[11px] uppercase tracking-widest text-white/50">Main Wallet</div>
+                  {loading ? (
+                    <Skeleton className="mt-2 h-6 w-28" />
+                  ) : (
+                    <div className="mt-1 font-numbers text-white" data-testid="main-balance">
+                      PKR {balance?.wallet_balance?.toLocaleString() || '0'}
+                    </div>
+                  )}
+                </div>
+                <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+                  <div className="text-[11px] uppercase tracking-widest text-white/50">Bonus</div>
+                  {loading ? (
+                    <Skeleton className="mt-2 h-6 w-24" />
+                  ) : (
+                    <div className="mt-1 font-numbers text-white" data-testid="bonus-balance">
+                      PKR {balance?.bonus_balance?.toLocaleString() || '0'}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Recent Transactions */}
+          {/* Recent Transactions */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-3">
-              <h3 className="font-primary font-semibold text-white">Recent Deposits</h3>
-              {deposits.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">No deposits yet</p>
+              <div className="font-primary text-white">Recent Deposits</div>
+              {loading ? (
+                <div className="space-y-2">
+                  <Skeleton className="h-14 w-full" />
+                  <Skeleton className="h-14 w-full" />
+                </div>
+              ) : deposits.length === 0 ? (
+                <EmptyState title="No deposits yet" description="Your deposits will appear here once processed." />
               ) : (
                 deposits.slice(0, 5).map((deposit) => (
-                  <div key={deposit.id} className="bg-white/5 border border-white/10 rounded-lg p-4 flex items-center justify-between">
+                  <div
+                    key={deposit.id}
+                    className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4 flex items-center justify-between"
+                  >
                     <div className="flex items-center gap-3">
                       <ArrowDownCircle className="w-5 h-5 text-neon-green" />
                       <div>
-                        <p className="text-white font-medium">PKR {deposit.amount.toLocaleString()}</p>
-                        <p className="text-gray-500 text-xs">{new Date(deposit.created_at).toLocaleString()}</p>
+                        <div className="text-white font-medium font-numbers">PKR {deposit.amount.toLocaleString()}</div>
+                        <div className="text-white/50 text-xs">{new Date(deposit.created_at).toLocaleString()}</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <StatusIcon status={deposit.status} />
-                      <span className="text-xs text-gray-400 capitalize">{deposit.status}</span>
+                      <WalletStatusIcon status={deposit.status} />
+                      <span className="text-xs text-white/60 capitalize">{deposit.status}</span>
                     </div>
                   </div>
                 ))
@@ -148,148 +174,146 @@ const Wallet = () => {
             </div>
 
             <div className="space-y-3">
-              <h3 className="font-primary font-semibold text-white">Recent Withdrawals</h3>
-              {withdrawals.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">No withdrawals yet</p>
+              <div className="font-primary text-white">Recent Withdrawals</div>
+              {loading ? (
+                <div className="space-y-2">
+                  <Skeleton className="h-14 w-full" />
+                  <Skeleton className="h-14 w-full" />
+                </div>
+              ) : withdrawals.length === 0 ? (
+                <EmptyState title="No withdrawals yet" description="Your withdrawals will appear here once processed." />
               ) : (
                 withdrawals.slice(0, 5).map((withdrawal) => (
-                  <div key={withdrawal.id} className="bg-white/5 border border-white/10 rounded-lg p-4 flex items-center justify-between">
+                  <div
+                    key={withdrawal.id}
+                    className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4 flex items-center justify-between"
+                  >
                     <div className="flex items-center gap-3">
-                      <ArrowUpCircle className="w-5 h-5 text-gold-500" />
+                      <ArrowUpCircle className="w-5 h-5 text-gold" />
                       <div>
-                        <p className="text-white font-medium">PKR {withdrawal.amount.toLocaleString()}</p>
-                        <p className="text-gray-500 text-xs">{new Date(withdrawal.created_at).toLocaleString()}</p>
+                        <div className="text-white font-medium font-numbers">PKR {withdrawal.amount.toLocaleString()}</div>
+                        <div className="text-white/50 text-xs">{new Date(withdrawal.created_at).toLocaleString()}</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <StatusIcon status={withdrawal.status} />
-                      <span className="text-xs text-gray-400 capitalize">{withdrawal.status}</span>
+                      <WalletStatusIcon status={withdrawal.status} />
+                      <span className="text-xs text-white/60 capitalize">{withdrawal.status}</span>
                     </div>
                   </div>
                 ))
               )}
             </div>
-          </TabsContent>
+          </div>
+        </TabsContent>
 
-          {/* Deposit Tab */}
-          <TabsContent value="deposit" className="mt-6">
-            <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-xl p-6">
-              <h3 className="font-primary font-bold text-xl text-white mb-4">Deposit Funds</h3>
-              <p className="text-gray-400 text-sm mb-6">
-                Submit a deposit request with your JazzCash details. Admin will review and credit your account.
-              </p>
+        {/* Deposit Tab */}
+        <TabsContent value="deposit" className="mt-6">
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+            <h3 className="font-primary text-white text-lg">Deposit</h3>
+            <p className="text-sm text-white/60 mt-1">Enter details to top up your wallet (PKR).</p>
 
-              <form onSubmit={handleDeposit} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="deposit-amount" className="text-white">Amount (PKR)</Label>
-                  <Input
-                    id="deposit-amount"
-                    type="number"
-                    min="100"
-                    max="1000000"
-                    required
-                    value={depositForm.amount}
-                    onChange={(e) => setDepositForm({ ...depositForm, amount: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white"
-                    placeholder="Minimum 100 PKR"
-                    data-testid="deposit-amount-input"
-                  />
-                  <p className="text-xs text-gray-500">Min: PKR 100 | Max: PKR 1,000,000</p>
-                </div>
+            <form onSubmit={handleDeposit} className="space-y-4 mt-6">
+              <div className="space-y-2">
+                <Label htmlFor="deposit-amount" className="text-white">Amount (PKR)</Label>
+                <Input
+                  id="deposit-amount"
+                  type="number"
+                  min="100"
+                  max="1000000"
+                  required
+                  value={depositForm.amount}
+                  onChange={(e) => setDepositForm({ ...depositForm, amount: e.target.value })}
+                  className="bg-black/40 border-white/10 text-white"
+                  placeholder="Minimum 100"
+                  data-testid="deposit-amount-input"
+                />
+                <div className="text-xs text-white/45">Min: PKR 100 • Max: PKR 1,000,000</div>
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="deposit-jazzcash" className="text-white">Your JazzCash Number</Label>
-                  <Input
-                    id="deposit-jazzcash"
-                    type="tel"
-                    required
-                    value={depositForm.jazzcash_number}
-                    onChange={(e) => setDepositForm({ ...depositForm, jazzcash_number: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white"
-                    placeholder="03XX-XXXXXXX"
-                    data-testid="deposit-jazzcash-input"
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="deposit-jazzcash" className="text-white">JazzCash Number</Label>
+                <Input
+                  id="deposit-jazzcash"
+                  type="tel"
+                  required
+                  value={depositForm.jazzcash_number}
+                  onChange={(e) => setDepositForm({ ...depositForm, jazzcash_number: e.target.value })}
+                  className="bg-black/40 border-white/10 text-white"
+                  placeholder="03XX-XXXXXXX"
+                  data-testid="deposit-jazzcash-input"
+                />
+              </div>
 
-                <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
-                  <p className="text-yellow-300 text-sm">
-                    <strong>Note:</strong> After submission, admin will review your request and send approval via email. Your wallet will be credited once approved.
-                  </p>
-                </div>
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="w-full rounded-full bg-gradient-to-r from-gold via-gold-400 to-gold-600 text-black font-bold py-6 hover:brightness-110"
+                data-testid="submit-deposit-btn"
+              >
+                {submitting ? 'Submitting…' : 'Deposit Now'}
+              </Button>
 
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-neon-green hover:bg-neon-green/80 text-black font-bold py-6"
-                  data-testid="submit-deposit-btn"
-                >
-                  {loading ? 'Submitting...' : 'Submit Deposit Request'}
-                </Button>
-              </form>
-            </div>
-          </TabsContent>
+              <div className="text-xs text-white/45 text-center">
+                Secure processing • Status updates will appear in your wallet history.
+              </div>
+            </form>
+          </div>
+        </TabsContent>
 
-          {/* Withdraw Tab */}
-          <TabsContent value="withdraw" className="mt-6">
-            <div className="backdrop-blur-xl bg-black/40 border border-white/10 rounded-xl p-6">
-              <h3 className="font-primary font-bold text-xl text-white mb-4">Withdraw Funds</h3>
-              <p className="text-gray-400 text-sm mb-6">
-                Request withdrawal to your JazzCash account. KYC verification is required.
-              </p>
+        {/* Withdraw Tab */}
+        <TabsContent value="withdraw" className="mt-6">
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+            <h3 className="font-primary text-white text-lg">Withdraw</h3>
+            <p className="text-sm text-white/60 mt-1">Request withdrawal to your JazzCash account (PKR).</p>
 
-              <form onSubmit={handleWithdraw} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="withdraw-amount" className="text-white">Amount (PKR)</Label>
-                  <Input
-                    id="withdraw-amount"
-                    type="number"
-                    min="500"
-                    max="500000"
-                    required
-                    value={withdrawForm.amount}
-                    onChange={(e) => setWithdrawForm({ ...withdrawForm, amount: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white"
-                    placeholder="Minimum 500 PKR"
-                    data-testid="withdraw-amount-input"
-                  />
-                  <p className="text-xs text-gray-500">Min: PKR 500 | Max: PKR 500,000</p>
-                </div>
+            <form onSubmit={handleWithdraw} className="space-y-4 mt-6">
+              <div className="space-y-2">
+                <Label htmlFor="withdraw-amount" className="text-white">Amount (PKR)</Label>
+                <Input
+                  id="withdraw-amount"
+                  type="number"
+                  min="500"
+                  max="500000"
+                  required
+                  value={withdrawForm.amount}
+                  onChange={(e) => setWithdrawForm({ ...withdrawForm, amount: e.target.value })}
+                  className="bg-black/40 border-white/10 text-white"
+                  placeholder="Minimum 500"
+                  data-testid="withdraw-amount-input"
+                />
+                <div className="text-xs text-white/45">Min: PKR 500 • Max: PKR 500,000</div>
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="withdraw-jazzcash" className="text-white">Your JazzCash Number</Label>
-                  <Input
-                    id="withdraw-jazzcash"
-                    type="tel"
-                    required
-                    value={withdrawForm.jazzcash_number}
-                    onChange={(e) => setWithdrawForm({ ...withdrawForm, jazzcash_number: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white"
-                    placeholder="03XX-XXXXXXX"
-                    data-testid="withdraw-jazzcash-input"
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="withdraw-jazzcash" className="text-white">JazzCash Number</Label>
+                <Input
+                  id="withdraw-jazzcash"
+                  type="tel"
+                  required
+                  value={withdrawForm.jazzcash_number}
+                  onChange={(e) => setWithdrawForm({ ...withdrawForm, jazzcash_number: e.target.value })}
+                  className="bg-black/40 border-white/10 text-white"
+                  placeholder="03XX-XXXXXXX"
+                  data-testid="withdraw-jazzcash-input"
+                />
+              </div>
 
-                <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4">
-                  <p className="text-yellow-300 text-sm">
-                    <strong>KYC Required:</strong> First-time withdrawals require KYC verification. Admin will review and process your request.
-                  </p>
-                </div>
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="w-full rounded-full bg-white/5 border border-white/10 text-white font-bold py-6 hover:bg-white/10"
+                data-testid="submit-withdraw-btn"
+              >
+                {submitting ? 'Submitting…' : 'Withdraw Now'}
+              </Button>
 
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gold-500 hover:bg-gold-400 text-black font-bold py-6"
-                  data-testid="submit-withdraw-btn"
-                >
-                  {loading ? 'Submitting...' : 'Submit Withdrawal Request'}
-                </Button>
-              </form>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
+              <div className="text-xs text-white/45 text-center">
+                Secure processing • Status updates will appear in your wallet history.
+              </div>
+            </form>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </PageShell>
   );
-};
-
-export default Wallet;
+}
