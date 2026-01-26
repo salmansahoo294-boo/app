@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { adminAPI } from '../utils/api';
 import { Button } from '../components/ui/button';
-import { Users, DollarSign, Clock, TrendingUp, CheckCircle, XCircle } from 'lucide-react';
+import { Users, Clock, TrendingUp, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'sonner';
+import { PageShell } from '../components/PageShell';
+import { Skeleton } from '../components/ui/skeleton';
+import { EmptyState } from '../components/EmptyState';
 
-const AdminDashboard = () => {
+export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
   const [pendingDeposits, setPendingDeposits] = useState([]);
   const [pendingWithdrawals, setPendingWithdrawals] = useState([]);
@@ -16,6 +19,7 @@ const AdminDashboard = () => {
 
   const loadData = async () => {
     try {
+      setLoading(true);
       const [statsRes, depositsRes, withdrawalsRes] = await Promise.all([
         adminAPI.getDashboardStats(),
         adminAPI.getPendingDeposits(),
@@ -78,107 +82,102 @@ const AdminDashboard = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-obsidian flex items-center justify-center">
-        <div className="text-gold-500 text-xl">Loading...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-obsidian pb-20">
-      {/* Header */}
-      <div className="bg-gradient-to-b from-obsidian to-black border-b border-white/10 p-6">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="font-primary font-bold text-2xl text-white" data-testid="admin-title">Admin Dashboard</h1>
-          <p className="text-gray-400 text-sm">Manage WINPKRHUB Platform</p>
+    <PageShell title="Admin Dashboard" subtitle="Monitor players and approvals.">
+      <div className="space-y-6">
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
+            <Users className="w-5 h-5 text-gold" />
+            <div className="mt-3 text-[11px] uppercase tracking-widest text-white/50">Total Users</div>
+            {loading ? (
+              <Skeleton className="mt-2 h-7 w-16" />
+            ) : (
+              <div className="font-numbers text-white text-2xl" data-testid="total-users">{stats?.users?.total || 0}</div>
+            )}
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
+            <Clock className="w-5 h-5 text-warning" />
+            <div className="mt-3 text-[11px] uppercase tracking-widest text-white/50">Pending Deposits</div>
+            {loading ? (
+              <Skeleton className="mt-2 h-7 w-16" />
+            ) : (
+              <div className="font-numbers text-white text-2xl" data-testid="pending-deposits">{stats?.pending_approvals?.deposits || 0}</div>
+            )}
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
+            <Clock className="w-5 h-5 text-neon-red" />
+            <div className="mt-3 text-[11px] uppercase tracking-widest text-white/50">Pending Withdrawals</div>
+            {loading ? (
+              <Skeleton className="mt-2 h-7 w-16" />
+            ) : (
+              <div className="font-numbers text-white text-2xl" data-testid="pending-withdrawals">{stats?.pending_approvals?.withdrawals || 0}</div>
+            )}
+          </div>
+
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
+            <TrendingUp className="w-5 h-5 text-neon-green" />
+            <div className="mt-3 text-[11px] uppercase tracking-widest text-white/50">Winning Ratio Today</div>
+            {loading ? (
+              <Skeleton className="mt-2 h-7 w-16" />
+            ) : (
+              <div className="font-numbers text-white text-2xl" data-testid="winning-ratio">{stats?.today?.winning_ratio || 0}%</div>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto p-4 space-y-6">
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-            <Users className="w-8 h-8 text-gold-500 mb-2" />
-            <p className="text-gray-400 text-xs mb-1">Total Users</p>
-            <p className="font-numbers font-bold text-white text-2xl" data-testid="total-users">
-              {stats?.users?.total || 0}
-            </p>
-          </div>
-
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-            <Clock className="w-8 h-8 text-yellow-500 mb-2" />
-            <p className="text-gray-400 text-xs mb-1">Pending Deposits</p>
-            <p className="font-numbers font-bold text-white text-2xl" data-testid="pending-deposits">
-              {stats?.pending_approvals?.deposits || 0}
-            </p>
-          </div>
-
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-            <Clock className="w-8 h-8 text-neon-red mb-2" />
-            <p className="text-gray-400 text-xs mb-1">Pending Withdrawals</p>
-            <p className="font-numbers font-bold text-white text-2xl" data-testid="pending-withdrawals">
-              {stats?.pending_approvals?.withdrawals || 0}
-            </p>
-          </div>
-
-          <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-            <TrendingUp className="w-8 h-8 text-neon-green mb-2" />
-            <p className="text-gray-400 text-xs mb-1">Winning Ratio Today</p>
-            <p className="font-numbers font-bold text-white text-2xl" data-testid="winning-ratio">
-              {stats?.today?.winning_ratio || 0}%
-            </p>
-          </div>
-        </div>
-
-        {/* Today's Stats */}
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-xl p-6">
-          <h2 className="font-primary font-bold text-xl text-white mb-4">Today's Summary</h2>
-          <div className="grid grid-cols-3 gap-4">
-            <div>
-              <p className="text-gray-400 text-xs mb-1">Deposits</p>
-              <p className="font-numbers font-bold text-neon-green text-lg">
-                PKR {stats?.today?.deposits?.toLocaleString() || '0'}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs mb-1">Withdrawals</p>
-              <p className="font-numbers font-bold text-gold-500 text-lg">
-                PKR {stats?.today?.withdrawals?.toLocaleString() || '0'}
-              </p>
-            </div>
-            <div>
-              <p className="text-gray-400 text-xs mb-1">Total Bets</p>
-              <p className="font-numbers font-bold text-white text-lg">
-                PKR {stats?.today?.total_bets?.toLocaleString() || '0'}
-              </p>
-            </div>
+        {/* Today's Summary */}
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
+          <div className="font-primary text-white text-lg">Today's Summary</div>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+            {[
+              { label: 'Deposits', value: stats?.today?.deposits, color: 'text-neon-green' },
+              { label: 'Withdrawals', value: stats?.today?.withdrawals, color: 'text-gold' },
+              { label: 'Total Bets', value: stats?.today?.total_bets, color: 'text-white' },
+            ].map((s) => (
+              <div key={s.label} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-[11px] uppercase tracking-widest text-white/50">{s.label}</div>
+                {loading ? (
+                  <Skeleton className="mt-2 h-6 w-28" />
+                ) : (
+                  <div className={`mt-1 font-numbers ${s.color}`}>PKR {Number(s.value || 0).toLocaleString()}</div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
         {/* Pending Deposits */}
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-xl p-6">
-          <h2 className="font-primary font-bold text-xl text-white mb-4">Pending Deposits</h2>
-          {pendingDeposits.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No pending deposits</p>
-          ) : (
-            <div className="space-y-3">
-              {pendingDeposits.map((deposit) => (
-                <div key={deposit.id} className="bg-white/5 border border-white/10 rounded-lg p-4" data-testid={`deposit-${deposit.id}`}>
-                  <div className="flex items-start justify-between mb-3">
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
+          <div className="font-primary text-white text-lg">Pending Deposits</div>
+          <div className="mt-4 space-y-3">
+            {loading ? (
+              <>
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+              </>
+            ) : pendingDeposits.length === 0 ? (
+              <EmptyState title="No pending deposits" description="All caught up." />
+            ) : (
+              pendingDeposits.map((deposit) => (
+                <div
+                  key={deposit.id}
+                  className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                  data-testid={`deposit-${deposit.id}`}
+                >
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                      <p className="text-white font-bold">PKR {deposit.amount.toLocaleString()}</p>
-                      <p className="text-gray-400 text-sm">JazzCash: {deposit.jazzcash_number}</p>
-                      <p className="text-gray-500 text-xs mt-1">
-                        {new Date(deposit.created_at).toLocaleString()}
-                      </p>
+                      <div className="text-white font-numbers text-lg">PKR {deposit.amount.toLocaleString()}</div>
+                      <div className="text-white/60 text-sm">JazzCash: {deposit.jazzcash_number}</div>
+                      <div className="text-white/45 text-xs mt-1">{new Date(deposit.created_at).toLocaleString()}</div>
                     </div>
                     <div className="flex gap-2">
                       <Button
                         size="sm"
                         onClick={() => handleApproveDeposit(deposit.id)}
-                        className="bg-neon-green hover:bg-neon-green/80 text-black"
+                        className="rounded-full bg-gradient-to-r from-gold via-gold-400 to-gold-600 text-black font-bold hover:brightness-110"
                         data-testid={`approve-deposit-${deposit.id}`}
                       >
                         <CheckCircle className="w-4 h-4 mr-1" />
@@ -187,6 +186,7 @@ const AdminDashboard = () => {
                       <Button
                         size="sm"
                         variant="destructive"
+                        className="rounded-full"
                         onClick={() => handleRejectDeposit(deposit.id)}
                         data-testid={`reject-deposit-${deposit.id}`}
                       >
@@ -196,33 +196,40 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
 
         {/* Pending Withdrawals */}
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-xl p-6">
-          <h2 className="font-primary font-bold text-xl text-white mb-4">Pending Withdrawals</h2>
-          {pendingWithdrawals.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">No pending withdrawals</p>
-          ) : (
-            <div className="space-y-3">
-              {pendingWithdrawals.map((withdrawal) => (
-                <div key={withdrawal.id} className="bg-white/5 border border-white/10 rounded-lg p-4" data-testid={`withdrawal-${withdrawal.id}`}>
-                  <div className="flex items-start justify-between mb-3">
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
+          <div className="font-primary text-white text-lg">Pending Withdrawals</div>
+          <div className="mt-4 space-y-3">
+            {loading ? (
+              <>
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+              </>
+            ) : pendingWithdrawals.length === 0 ? (
+              <EmptyState title="No pending withdrawals" description="All caught up." />
+            ) : (
+              pendingWithdrawals.map((withdrawal) => (
+                <div
+                  key={withdrawal.id}
+                  className="rounded-2xl border border-white/10 bg-black/20 p-4"
+                  data-testid={`withdrawal-${withdrawal.id}`}
+                >
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
-                      <p className="text-white font-bold">PKR {withdrawal.amount.toLocaleString()}</p>
-                      <p className="text-gray-400 text-sm">JazzCash: {withdrawal.jazzcash_number}</p>
-                      <p className="text-gray-500 text-xs mt-1">
-                        {new Date(withdrawal.created_at).toLocaleString()}
-                      </p>
+                      <div className="text-white font-numbers text-lg">PKR {withdrawal.amount.toLocaleString()}</div>
+                      <div className="text-white/60 text-sm">JazzCash: {withdrawal.jazzcash_number}</div>
+                      <div className="text-white/45 text-xs mt-1">{new Date(withdrawal.created_at).toLocaleString()}</div>
                     </div>
                     <div className="flex gap-2">
                       <Button
                         size="sm"
                         onClick={() => handleApproveWithdrawal(withdrawal.id)}
-                        className="bg-neon-green hover:bg-neon-green/80 text-black"
+                        className="rounded-full bg-gradient-to-r from-gold via-gold-400 to-gold-600 text-black font-bold hover:brightness-110"
                         data-testid={`approve-withdrawal-${withdrawal.id}`}
                       >
                         <CheckCircle className="w-4 h-4 mr-1" />
@@ -231,6 +238,7 @@ const AdminDashboard = () => {
                       <Button
                         size="sm"
                         variant="destructive"
+                        className="rounded-full"
                         onClick={() => handleRejectWithdrawal(withdrawal.id)}
                         data-testid={`reject-withdrawal-${withdrawal.id}`}
                       >
@@ -240,13 +248,11 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              ))
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </PageShell>
   );
-};
-
-export default AdminDashboard;
+}
