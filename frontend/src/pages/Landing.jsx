@@ -4,21 +4,7 @@ import { ArrowRight, ShieldCheck, Zap, Dices, Wallet, Headphones } from 'lucide-
 import { motion } from 'framer-motion';
 import { Button } from '../components/ui/button';
 
-const BrandMark = () => {
-  return (
-    <div className="flex items-center gap-3" aria-label="WINPKRHUB">
-      <div className="relative">
-        <div className="font-primary font-bold tracking-tight uppercase leading-none">
-          <span className="text-white">WIN</span>
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold via-gold-light to-gold-dark">PKR</span>
-        </div>
-        <div className="font-primary font-semibold uppercase tracking-[0.35em] text-[10px] text-gold/80 mt-1 ml-[2px]">
-          HUB
-        </div>
-      </div>
-    </div>
-  );
-};
+import { BrandMark } from '../components/BrandMark';
 
 const StatPill = ({ label, value }) => {
   return (
