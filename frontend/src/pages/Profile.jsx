@@ -5,9 +5,12 @@ import { userAPI } from '../utils/api';
 import { Button } from '../components/ui/button';
 import { LogOut, User as UserIcon, Mail, Phone, Shield, Award } from 'lucide-react';
 import { toast } from 'sonner';
+import { PageShell } from '../components/PageShell';
+import { Skeleton } from '../components/ui/skeleton';
+import { EmptyState } from '../components/EmptyState';
 
-const Profile = () => {
-  const { user, logout } = useAuth();
+export default function Profile() {
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [stats, setStats] = useState(null);
@@ -19,6 +22,7 @@ const Profile = () => {
 
   const loadData = async () => {
     try {
+      setLoading(true);
       const [profileRes, statsRes] = await Promise.all([
         userAPI.getProfile(),
         userAPI.getStats(),
@@ -38,151 +42,133 @@ const Profile = () => {
     navigate('/');
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-obsidian flex items-center justify-center">
-        <div className="text-gold-500 text-xl">Loading...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-obsidian pb-20">
-      {/* Header */}
-      <div className="bg-gradient-to-b from-obsidian to-black border-b border-white/10 p-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="font-primary font-bold text-2xl text-white" data-testid="profile-title">Profile</h1>
-          <p className="text-gray-400 text-sm">Manage your account</p>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto p-4 space-y-6">
+    <PageShell title="Profile" subtitle="Account security and records.">
+      <div className="space-y-6">
         {/* Profile Card */}
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-xl p-6">
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-gold-500 to-gold-600 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold to-gold-600 flex items-center justify-center">
               <UserIcon className="w-8 h-8 text-black" />
             </div>
             <div>
-              <h2 className="font-primary font-bold text-xl text-white" data-testid="profile-name">
-                {profile?.full_name || 'User'}
+              <h2 className="font-primary text-white text-lg" data-testid="profile-name">
+                {loading ? <Skeleton className="h-6 w-40" /> : (profile?.full_name || 'User')}
               </h2>
-              <p className="text-gray-400 text-sm" data-testid="profile-email">{profile?.email}</p>
+              <p className="text-white/60 text-sm" data-testid="profile-email">
+                {loading ? <Skeleton className="mt-2 h-4 w-56" /> : profile?.email}
+              </p>
             </div>
           </div>
 
-          <div className="space-y-3">
-            <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
-              <Mail className="w-5 h-5 text-gold-500" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="flex items-center gap-3 p-4 rounded-2xl border border-white/10 bg-black/20">
+              <Mail className="w-5 h-5 text-gold" />
               <div>
-                <p className="text-gray-400 text-xs">Email</p>
-                <p className="text-white">{profile?.email}</p>
+                <p className="text-white/50 text-xs uppercase tracking-widest">Email</p>
+                <p className="text-white text-sm">{loading ? '—' : profile?.email}</p>
               </div>
             </div>
 
-            {profile?.phone && (
-              <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
-                <Phone className="w-5 h-5 text-gold-500" />
-                <div>
-                  <p className="text-gray-400 text-xs">Phone</p>
-                  <p className="text-white">{profile.phone}</p>
-                </div>
-              </div>
-            )}
-
-            <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
-              <Shield className="w-5 h-5 text-gold-500" />
+            <div className="flex items-center gap-3 p-4 rounded-2xl border border-white/10 bg-black/20">
+              <Phone className="w-5 h-5 text-gold" />
               <div>
-                <p className="text-gray-400 text-xs">KYC Status</p>
-                <p className={`font-medium capitalize ${
+                <p className="text-white/50 text-xs uppercase tracking-widest">Phone</p>
+                <p className="text-white text-sm">{loading ? '—' : (profile?.phone || 'Not added')}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 p-4 rounded-2xl border border-white/10 bg-black/20">
+              <Shield className="w-5 h-5 text-gold" />
+              <div>
+                <p className="text-white/50 text-xs uppercase tracking-widest">KYC Status</p>
+                <p className={`text-sm capitalize ${
                   profile?.kyc_status === 'approved' ? 'text-neon-green' :
-                  profile?.kyc_status === 'pending' ? 'text-yellow-500' :
-                  'text-gray-400'
+                  profile?.kyc_status === 'pending' ? 'text-warning' :
+                  'text-white/60'
                 }`}>
-                  {profile?.kyc_status?.replace('_', ' ')}
+                  {loading ? 'Loading…' : (profile?.kyc_status?.replace('_', ' ') || 'not verified')}
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg">
-              <Award className="w-5 h-5 text-gold-500" />
+            <div className="flex items-center gap-3 p-4 rounded-2xl border border-white/10 bg-black/20">
+              <Award className="w-5 h-5 text-gold" />
               <div>
-                <p className="text-gray-400 text-xs">VIP Level</p>
-                <p className="text-white font-numbers font-bold">{profile?.vip_level || 0}</p>
+                <p className="text-white/50 text-xs uppercase tracking-widest">VIP Level</p>
+                <p className="text-white font-numbers">{loading ? '—' : (profile?.vip_level || 0)}</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Stats Card */}
-        <div className="backdrop-blur-xl bg-white/5 border border-white/10 rounded-xl p-6">
-          <h3 className="font-primary font-bold text-lg text-white mb-4">Statistics</h3>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-white/5 rounded-lg">
-              <p className="text-gray-400 text-xs mb-1">Total Deposits</p>
-              <p className="font-numbers font-bold text-white text-lg" data-testid="total-deposits">
-                PKR {stats?.total_deposits?.toLocaleString() || '0'}
-              </p>
-            </div>
-            <div className="p-4 bg-white/5 rounded-lg">
-              <p className="text-gray-400 text-xs mb-1">Total Withdrawals</p>
-              <p className="font-numbers font-bold text-white text-lg" data-testid="total-withdrawals">
-                PKR {stats?.total_withdrawals?.toLocaleString() || '0'}
-              </p>
-            </div>
-            <div className="p-4 bg-white/5 rounded-lg">
-              <p className="text-gray-400 text-xs mb-1">Total Bets</p>
-              <p className="font-numbers font-bold text-white text-lg" data-testid="total-bets-stat">
-                PKR {stats?.total_bets?.toLocaleString() || '0'}
-              </p>
-            </div>
-            <div className="p-4 bg-white/5 rounded-lg">
-              <p className="text-gray-400 text-xs mb-1">Total Wins</p>
-              <p className="font-numbers font-bold text-neon-green text-lg" data-testid="total-wins-stat">
-                PKR {stats?.total_wins?.toLocaleString() || '0'}
-              </p>
-            </div>
+        {/* Stats */}
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+          <div className="font-primary text-white text-lg">Statistics</div>
+
+          <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { label: 'Total Deposits', value: stats?.total_deposits, color: 'text-white' },
+              { label: 'Total Withdrawals', value: stats?.total_withdrawals, color: 'text-white' },
+              { label: 'Total Bets', value: stats?.total_bets, color: 'text-white' },
+              { label: 'Total Wins', value: stats?.total_wins, color: 'text-neon-green' },
+            ].map((s) => (
+              <div key={s.label} className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-[11px] uppercase tracking-widest text-white/50">{s.label}</div>
+                {loading ? (
+                  <Skeleton className="mt-2 h-6 w-24" />
+                ) : (
+                  <div className={`mt-1 font-numbers ${s.color}`}>PKR {Number(s.value || 0).toLocaleString()}</div>
+                )}
+              </div>
+            ))}
           </div>
 
-          <div className="mt-4 p-4 bg-gradient-to-r from-gold-500/10 to-neon-green/10 border border-gold-500/30 rounded-lg">
-            <p className="text-gray-400 text-xs mb-1">Profit / Loss</p>
-            <p className={`font-numbers font-bold text-2xl ${
-              stats?.profit_loss >= 0 ? 'text-neon-green' : 'text-neon-red'
-            }`} data-testid="profit-loss-stat">
-              {stats?.profit_loss >= 0 ? '+' : ''} PKR {stats?.profit_loss?.toLocaleString() || '0'}
-            </p>
+          <div className="mt-4 rounded-2xl border border-white/10 bg-gradient-to-r from-gold/10 to-neon-green/10 p-4">
+            <div className="text-[11px] uppercase tracking-widest text-white/50">Profit / Loss</div>
+            {loading ? (
+              <Skeleton className="mt-2 h-7 w-32" />
+            ) : (
+              <div
+                className={`mt-1 font-numbers text-2xl ${stats?.profit_loss >= 0 ? 'text-neon-green' : 'text-neon-red'}`}
+                data-testid="profit-loss-stat"
+              >
+                {stats?.profit_loss >= 0 ? '+' : ''} PKR {Number(stats?.profit_loss || 0).toLocaleString()}
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Referral Card */}
-        {profile?.referral_code && (
-          <div className="backdrop-blur-xl bg-gradient-to-br from-neon-green/20 to-gold-500/20 border border-neon-green/30 rounded-xl p-6">
-            <h3 className="font-primary font-bold text-lg text-white mb-2">Refer & Earn</h3>
-            <p className="text-gray-300 text-sm mb-4">Share your referral code and earn bonuses when friends join WINPKRHUB!</p>
-            
-            <div className="bg-black/30 border border-white/20 rounded-lg p-4">
-              <p className="text-gray-400 text-xs mb-1">Your Referral Code</p>
-              <p className="font-numbers font-bold text-2xl text-gold-500" data-testid="referral-code">
+        {/* Referral */}
+        {loading ? null : profile?.referral_code ? (
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+            <div className="font-primary text-white text-lg">Refer & Earn</div>
+            <div className="text-sm text-white/60 mt-1">Share your referral code and earn bonuses.</div>
+
+            <div className="mt-4 rounded-2xl border border-white/10 bg-black/30 p-4">
+              <div className="text-[11px] uppercase tracking-widest text-white/50">Your Referral Code</div>
+              <div className="mt-2 font-numbers text-2xl text-gold" data-testid="referral-code">
                 {profile.referral_code}
-              </p>
+              </div>
             </div>
           </div>
+        ) : (
+          <EmptyState
+            title="No referral code"
+            description="Referral bonuses will appear here once enabled."
+          />
         )}
 
-        {/* Logout Button */}
         <Button
           onClick={handleLogout}
           variant="destructive"
-          className="w-full py-6 font-bold"
+          className="w-full rounded-full py-6 font-bold"
           data-testid="logout-btn"
         >
           <LogOut className="w-5 h-5 mr-2" />
           Logout
         </Button>
       </div>
-    </div>
+    </PageShell>
   );
-};
-
-export default Profile;
+}
