@@ -12,11 +12,20 @@ module.exports = {
           paper: "#0A0A0A",
           subtle: "#121212"
         },
+        // Gold scale (supports both premium tokens and legacy -500/-600 usage)
         gold: {
           DEFAULT: "#D4AF37",
+          400: "#F4C430",
+          500: "#D4AF37",
+          600: "#AA8C2C",
           light: "#F4C430",
           dark: "#AA8C2C"
         },
+        // Legacy semantic colors used across pages
+        'neon-green': "#10B981",
+        'neon-red': "#EF4444",
+        'warning': "#F59E0B",
+
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
