@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { userAPI } from '../utils/api';
-import { Wallet, TrendingUp, Trophy, Gamepad2 } from 'lucide-react';
+import { Wallet, TrendingUp, Trophy, Gamepad2, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/button';
+import { Skeleton } from '../components/ui/skeleton';
 import { toast } from 'sonner';
+import { PageShell } from '../components/PageShell';
+import { EmptyState } from '../components/EmptyState';
 
 const GAME_CATEGORIES = [
   { id: 'lottery', name: 'Lottery', games: ['Win Go 1 Min', 'Win Go 3 Min', 'Win Go 5 Min', 'Dice'] },
@@ -13,7 +16,7 @@ const GAME_CATEGORIES = [
   { id: 'cards', name: 'Cards', games: ['Teen Patti'] },
 ];
 
-const Home = () => {
+export default function Home() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [balance, setBalance] = useState(null);
@@ -40,136 +43,150 @@ const Home = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-obsidian flex items-center justify-center">
-        <div className="text-gold-500 text-xl">Loading...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-obsidian pb-20">
-      {/* Header */}
-      <div className="bg-gradient-to-b from-obsidian to-black border-b border-white/10 p-6">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="font-primary font-bold text-2xl text-white mb-1" data-testid="welcome-message">
-            Welcome, {user?.full_name || user?.email?.split('@')[0] || 'Player'}
-          </h1>
-          <p className="text-gray-400 text-sm">Your luck starts here</p>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto p-4 space-y-6">
-        {/* Wallet Card */}
-        <div 
-          className="backdrop-blur-xl bg-gradient-to-br from-gold-600 via-gold-500 to-gold-400 rounded-xl p-6 cursor-pointer hover:scale-[1.02] transition-transform"
+    <PageShell
+      title={`Welcome, ${user?.full_name || user?.email?.split('@')[0] || 'Player'}`}
+      subtitle="Your lobby is ready. Choose a category and start playing."
+      rightSlot={
+        <Button
+          onClick={() => navigate('/wallet?tab=deposit')}
+          className="rounded-full bg-gradient-to-r from-gold via-gold-400 to-gold-600 text-black font-bold hover:brightness-110"
+          data-testid="deposit-btn"
+        >
+          Deposit
+          <ArrowRight className="h-4 w-4 ml-2" />
+        </Button>
+      }
+    >
+      <div className="space-y-6">
+        {/* Wallet Preview */}
+        <div
+          className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)] cursor-pointer"
           onClick={() => navigate('/wallet')}
           data-testid="wallet-card"
         >
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-black/20 flex items-center justify-center">
-                <Wallet className="w-6 h-6 text-black" />
+          <div className="absolute inset-0 opacity-60 bg-gradient-to-br from-gold/15 via-transparent to-transparent" />
+          <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                <Wallet className="h-5 w-5 text-gold" />
               </div>
               <div>
-                <p className="text-black/70 text-sm font-medium">Total Balance</p>
-                <p className="font-numbers font-bold text-3xl text-black">
-                  PKR {balance?.total_balance?.toLocaleString() || '0'}
-                </p>
+                <div className="text-xs uppercase tracking-widest text-white/50">Total Balance</div>
+                {loading ? (
+                  <Skeleton className="mt-2 h-9 w-56" />
+                ) : (
+                  <div className="font-numbers text-3xl text-white">PKR {balance?.total_balance?.toLocaleString() || '0'}</div>
+                )}
               </div>
             </div>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-black/10">
-            <div>
-              <p className="text-black/70 text-xs">Main Wallet</p>
-              <p className="font-numbers font-semibold text-black">PKR {balance?.wallet_balance?.toLocaleString() || '0'}</p>
-            </div>
-            <div>
-              <p className="text-black/70 text-xs">Bonus</p>
-              <p className="font-numbers font-semibold text-black">PKR {balance?.bonus_balance?.toLocaleString() || '0'}</p>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-xl border border-white/10 bg-black/20 px-4 py-3">
+                <div className="text-[11px] uppercase tracking-widest text-white/50">Main Wallet</div>
+                {loading ? (
+                  <Skeleton className="mt-2 h-6 w-28" />
+                ) : (
+                  <div className="font-numbers text-white">PKR {balance?.wallet_balance?.toLocaleString() || '0'}</div>
+                )}
+              </div>
+              <div className="rounded-xl border border-white/10 bg-black/20 px-4 py-3">
+                <div className="text-[11px] uppercase tracking-widest text-white/50">Bonus</div>
+                {loading ? (
+                  <Skeleton className="mt-2 h-6 w-24" />
+                ) : (
+                  <div className="font-numbers text-white">PKR {balance?.bonus_balance?.toLocaleString() || '0'}</div>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3">
           <Button
             onClick={() => navigate('/wallet?tab=deposit')}
-            className="bg-neon-green hover:bg-neon-green/80 text-black font-bold py-6"
-            data-testid="deposit-btn"
+            className="rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 py-6"
+            data-testid="quick-deposit"
           >
-            <TrendingUp className="w-5 h-5 mr-2" />
+            <TrendingUp className="w-5 h-5 mr-2 text-gold" />
             Deposit
           </Button>
           <Button
             onClick={() => navigate('/wallet?tab=withdraw')}
-            className="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold py-6"
-            data-testid="withdraw-btn"
+            className="rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 py-6"
+            data-testid="quick-withdraw"
           >
-            <Wallet className="w-5 h-5 mr-2" />
+            <Wallet className="w-5 h-5 mr-2 text-gold" />
             Withdraw
           </Button>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-obsidian border border-white/10 p-4 rounded-lg">
-            <p className="text-gray-500 text-xs mb-1">Total Bets</p>
-            <p className="font-numbers font-bold text-white text-lg">PKR {stats?.total_bets?.toLocaleString() || '0'}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
+            <div className="text-[11px] uppercase tracking-widest text-white/50">Total Bets</div>
+            {loading ? <Skeleton className="mt-2 h-7 w-32" /> : <div className="font-numbers text-white text-xl">PKR {stats?.total_bets?.toLocaleString() || '0'}</div>}
           </div>
-          <div className="bg-obsidian border border-white/10 p-4 rounded-lg">
-            <p className="text-gray-500 text-xs mb-1">Total Wins</p>
-            <p className="font-numbers font-bold text-neon-green text-lg">PKR {stats?.total_wins?.toLocaleString() || '0'}</p>
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
+            <div className="text-[11px] uppercase tracking-widest text-white/50">Total Wins</div>
+            {loading ? <Skeleton className="mt-2 h-7 w-32" /> : <div className="font-numbers text-neon-green text-xl">PKR {stats?.total_wins?.toLocaleString() || '0'}</div>}
           </div>
-          <div className="bg-obsidian border border-white/10 p-4 rounded-lg">
-            <p className="text-gray-500 text-xs mb-1">P/L</p>
-            <p className={`font-numbers font-bold text-lg ${
-              stats?.profit_loss >= 0 ? 'text-neon-green' : 'text-neon-red'
-            }`}>
-              {stats?.profit_loss >= 0 ? '+' : ''}{stats?.profit_loss?.toLocaleString() || '0'}
-            </p>
-          </div>
-        </div>
-
-        {/* Game Categories */}
-        <div id="games" className="space-y-6">
-          <h2 className="font-primary font-bold text-2xl text-white flex items-center gap-2">
-            <Gamepad2 className="w-6 h-6 text-gold-500" />
-            Games
-          </h2>
-
-          {GAME_CATEGORIES.map((category) => (
-            <div key={category.id}>
-              <h3 className="font-primary font-semibold text-lg text-white mb-3">{category.name}</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {category.games.map((game) => (
-                  <button
-                    key={game}
-                    onClick={() => toast.info('Game launching soon!')}
-                    className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-sm hover:border-gold-500/50 transition-all duration-300 p-4 text-left"
-                    data-testid={`game-${game.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-gold-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <Trophy className="w-8 h-8 text-gold-500 mb-2" />
-                    <p className="font-primary font-semibold text-white text-sm relative z-10">{game}</p>
-                    <p className="text-gray-500 text-xs relative z-10">Play Now</p>
-                  </button>
-                ))}
+          <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4">
+            <div className="text-[11px] uppercase tracking-widest text-white/50">P/L</div>
+            {loading ? (
+              <Skeleton className="mt-2 h-7 w-24" />
+            ) : (
+              <div className={`font-numbers text-xl ${stats?.profit_loss >= 0 ? 'text-neon-green' : 'text-neon-red'}`}>
+                {stats?.profit_loss >= 0 ? '+' : ''}{stats?.profit_loss?.toLocaleString() || '0'}
               </div>
-            </div>
-          ))}
+            )}
+          </div>
         </div>
 
-        {/* Coming Soon Badge */}
-        <div className="bg-gradient-to-r from-red-500/15 to-gold/15 border border-red-500/30 rounded-xl p-4 text-center">
-          <p className="text-white font-semibold">More Games Coming Soon!</p>
-          <p className="text-gray-400 text-sm mt-1">Stay tuned for Sports Betting, Live Casino & More</p>
+        {/* Game Lobby */}
+        <div id="games" className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="font-primary text-lg md:text-xl text-white flex items-center gap-2">
+              <Gamepad2 className="w-5 h-5 text-gold" />
+              Game Lobby
+            </h2>
+            <div className="text-xs text-white/50">All games show PKR by default</div>
+          </div>
+
+          {GAME_CATEGORIES.length === 0 ? (
+            <EmptyState
+              title="No games yet"
+              description="Categories will appear here once games are enabled by admin."
+            />
+          ) : (
+            GAME_CATEGORIES.map((category) => (
+              <div key={category.id} className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-primary text-white">{category.name}</h3>
+                  <div className="text-xs text-white/45">{category.games.length} games</div>
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {category.games.map((game) => (
+                    <button
+                      key={game}
+                      onClick={() => toast.info('Game launching soon!')}
+                      className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4 text-left shadow-[0_8px_32px_rgba(0,0,0,0.35)] hover:border-gold/40"
+                      data-testid={`game-${game.toLowerCase().replace(/\s+/g, '-')}`}
+                    >
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-gold/15 to-transparent" />
+                      <Trophy className="w-8 h-8 text-gold mb-3 relative" />
+                      <div className="font-primary text-white text-sm relative">{game}</div>
+                      <div className="text-xs text-white/55 relative">Tap to open</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
-    </div>
+    </PageShell>
   );
-};
-
-export default Home;
+}
