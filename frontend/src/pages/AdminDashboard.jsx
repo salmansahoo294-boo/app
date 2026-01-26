@@ -130,7 +130,7 @@ export default function AdminDashboard() {
 
         {/* Today's Summary */}
         <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
-          <div className="font-primary text-white text-lg">Today's Summary</div>
+          <div className="font-primary text-white text-lg">Today&apos;s Summary</div>
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
             {[
               { label: 'Deposits', value: stats?.today?.deposits, color: 'text-neon-green' },
