@@ -151,6 +151,19 @@
 ##     message: "✅ PHASE 1 POLISH RE-TESTING COMPLETED SUCCESSFULLY! Comprehensive testing covered: 1) Landing page renders with premium styling, WINPKR HUB branding visible, CTA buttons work perfectly ✅ 2) Admin login (admin@winpkr.com/Admin@123) works, dashboard loads with stats, approve/reject buttons present, bottom nav pill style confirmed ✅ 3) User registration and login flows work, redirects properly ✅ 4) Home page shows wallet preview, stats, game cards (12 found), loading skeletons handled properly, no layout breaks ✅ 5) Wallet tabs (Balance/Deposit/Withdraw) work perfectly, empty states show correctly, deposit/withdraw API calls work without crashes ✅ 6) Profile page loads with placeholders/skeleton handling, logout works ✅ 7) Mobile viewport (390x800) testing passed - landing renders, home/wallet layouts work, bottom nav positioned correctly (Y:710 < 800) ✅ 8) No critical console errors found (PostHog/WS warnings ignored as requested) ✅ All Phase 1 polish requirements verified and working perfectly!"
 
 
+## frontend:
+##   - task: "Phase 2 UI: Crash game page + lobby link + wallet shows pending/available balances"
+##     implemented: true
+##     working: false
+##     file: "/app/frontend/src/pages/CrashGame.jsx"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: true
+##     status_history:
+##       - working: "NA"
+##         agent: "main"
+##         comment: "Added /games/crash route and CrashGame UI; Home routes Aviator/Crash cards to /games/crash; Wallet displays Available/Pending/Bonus."
+
 ## backend:
 ##   - task: "Phase 2 core API: Crash game (provably fair) + admin-configurable settings + daily bet limit + auto-freeze"
 ##     implemented: true
