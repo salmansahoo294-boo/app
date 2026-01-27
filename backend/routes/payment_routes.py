@@ -102,7 +102,7 @@ async def create_withdrawal_request(
             detail="KYC verification required before withdrawal"
         )
     
-    # Check balance
+    # Check balance (available balance only)
     if user.get("wallet_balance", 0) < withdrawal_data.amount:
         raise HTTPException(status_code=400, detail="Insufficient balance")
     
