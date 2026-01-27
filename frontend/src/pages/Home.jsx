@@ -171,7 +171,13 @@ export default function Home() {
                   {category.games.map((game) => (
                     <button
                       key={game}
-                      onClick={() => toast.info('Game launching soon!')}
+                      onClick={() => {
+                        if (game.toLowerCase().includes('aviator') || game.toLowerCase().includes('crash')) {
+                          navigate('/games/crash');
+                          return;
+                        }
+                        toast.info('Game launching soon!');
+                      }}
                       className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-4 text-left shadow-[0_8px_32px_rgba(0,0,0,0.35)] hover:border-gold/40"
                       data-testid={`game-${game.toLowerCase().replace(/\s+/g, '-')}`}
                     >

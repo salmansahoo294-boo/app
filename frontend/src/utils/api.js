@@ -65,6 +65,16 @@ export const paymentAPI = {
 };
 
 // Admin APIs
+// Games APIs
+export const gamesAPI = {
+  getCrashFairness: () => api.get('/games/crash/fairness'),
+  verifyCrash: (params) => api.get('/games/crash/verify', { params }),
+  placeCrashBet: (data) => api.post('/games/crash/bet', data),
+  getGameSettings: () => api.get('/games/settings'),
+  getAdminSettings: () => api.get('/games/admin/settings'),
+  updateAdminSettings: (data) => api.post('/games/admin/settings', data),
+};
+
 export const adminAPI = {
   getDashboardStats: () => api.get('/admin/stats/dashboard'),
   getUsers: (params) => api.get('/admin/users', { params }),
