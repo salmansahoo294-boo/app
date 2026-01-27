@@ -10,7 +10,7 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # Import routes AFTER loading environment variables
-from routes import auth_routes, user_routes, payment_routes, admin_routes
+from routes import auth_routes, user_routes, payment_routes, admin_routes, game_routes
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -37,6 +37,7 @@ api_router.include_router(auth_routes.router)
 api_router.include_router(user_routes.router)
 api_router.include_router(payment_routes.router)
 api_router.include_router(admin_routes.router)
+api_router.include_router(game_routes.router)
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -67,6 +68,8 @@ async def startup_event():
     await db.withdrawals.create_index("user_id")
     await db.transactions.create_index("user_id")
     await db.bets.create_index("user_id")
+    await db.system_settings.create_index("setting_key", unique=True)
+    await db.security_events.create_index("user_id")
     logger.info("Database indexes created")
 
 @app.on_event("shutdown")
