@@ -39,7 +39,7 @@ async def update_profile(update_data: UserUpdate, current_user: dict = Depends(g
 @router.get("/wallet/balance")
 async def get_wallet_balance(current_user: dict = Depends(get_current_user), db: AsyncIOMotorDatabase = Depends(get_db)):
     """Get wallet balance"""
-    user = await db.users.find_one({"id": current_user["user_id"]}, {"_id": 0, "wallet_balance": 1, "bonus_balance": 1})
+    user = await db.users.find_one({"id": current_user["user_id"]}, {"_id": 0, "wallet_balance": 1, "locked_balance": 1, "bonus_balance": 1})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
