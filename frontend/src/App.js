@@ -91,6 +91,14 @@ function App() {
               }
             />
             <Route
+              path="/games/crash"
+              element={
+                <ProtectedRoute>
+                  <CrashGame />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/wallet"
               element={
                 <ProtectedRoute>
