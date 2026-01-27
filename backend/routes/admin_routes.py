@@ -171,7 +171,7 @@ async def approve_deposit(
         {"id": deposit["user_id"]},
         {
             "$set": {
-                "locked_balance": new_locked,
+                "wallet_balance": new_balance,
                 "total_deposits": new_total_deposits,
                 "updated_at": datetime.now(timezone.utc).isoformat()
             }
