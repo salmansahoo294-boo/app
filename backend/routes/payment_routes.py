@@ -6,8 +6,15 @@ from models import (
 )
 from auth import get_current_user
 from email_service import email_service
-from typing import List
+from typing import List, Any
 from datetime import datetime, timezone, timedelta
+
+
+async def _get_setting(db: AsyncIOMotorDatabase, key: str, default: Any) -> Any:
+    doc = await db.system_settings.find_one({"setting_key": key}, {"_id": 0})
+    if doc and "setting_value" in doc:
+        return doc["setting_value"]
+    return default
 
 router = APIRouter(prefix="/payment", tags=["Payment"])
 
@@ -23,16 +30,22 @@ async def create_deposit_request(
     db: AsyncIOMotorDatabase = Depends(get_db)
 ):
     """Create deposit request"""
-    if deposit_data.amount < 300:
-        raise HTTPException(status_code=400, detail="Minimum deposit amount is PKR 300")
-
-    if deposit_data.amount > 50000:
-        raise HTTPException(status_code=400, detail="Maximum deposit amount is PKR 50,000")
-    
-    # Get user info
     user = await db.users.find_one({"id": current_user["user_id"]}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    if not user.get("is_active", True) or user.get("is_frozen"):
+        raise HTTPException(status_code=403, detail="Account is not eligible for transactions")
+
+    deposit_min = float(await _get_setting(db, "deposit_min", 300))
+    deposit_max = float(await _get_setting(db, "deposit_max", 50000))
+
+    if deposit_data.amount < deposit_min:
+        raise HTTPException(status_code=400, detail=f"Minimum deposit amount is PKR {int(deposit_min)}")
+
+    if deposit_data.amount > deposit_max:
+        raise HTTPException(status_code=400, detail=f"Maximum deposit amount is PKR {int(deposit_max)}")
+    
+    # User already loaded above
     
     # Create deposit record
     deposit = Deposit(
@@ -94,6 +107,8 @@ async def create_withdrawal_request(
     user = await db.users.find_one({"id": current_user["user_id"]}, {"_id": 0})
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    if not user.get("is_active", True) or user.get("is_frozen"):
+        raise HTTPException(status_code=403, detail="Account is not eligible for transactions")
     
     # Check KYC
     if user.get("kyc_status") != "approved":
@@ -102,27 +117,65 @@ async def create_withdrawal_request(
             detail="KYC verification required before withdrawal"
         )
     
+    withdraw_min = float(await _get_setting(db, "withdraw_min", 300))
+    withdraw_max = float(await _get_setting(db, "withdraw_max", 30000))
+
     # Check balance (available balance only)
     if user.get("wallet_balance", 0) < withdrawal_data.amount:
         raise HTTPException(status_code=400, detail="Insufficient balance")
-    
-    if withdrawal_data.amount < 300:
-        raise HTTPException(status_code=400, detail="Minimum withdrawal amount is PKR 300")
 
-    if withdrawal_data.amount > 30000:
-        raise HTTPException(status_code=400, detail="Maximum withdrawal amount is PKR 30,000")
+    if withdrawal_data.amount < withdraw_min:
+        raise HTTPException(status_code=400, detail=f"Minimum withdrawal amount is PKR {int(withdraw_min)}")
+
+    if withdrawal_data.amount > withdraw_max:
+        raise HTTPException(status_code=400, detail=f"Maximum withdrawal amount is PKR {int(withdraw_max)}")
     
+    # Lock funds for withdrawal (Phase 2 trust model)
+    available = float(user.get("wallet_balance", 0.0))
+    locked = float(user.get("locked_balance", 0.0))
+
+    new_available = available - float(withdrawal_data.amount)
+    new_locked = locked + float(withdrawal_data.amount)
+
+    await db.users.update_one(
+        {"id": current_user["user_id"]},
+        {
+            "$set": {
+                "wallet_balance": new_available,
+                "locked_balance": new_locked,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }
+        },
+    )
+
     # Create withdrawal record
     withdrawal = Withdrawal(
         user_id=current_user["user_id"],
         amount=withdrawal_data.amount,
-        jazzcash_number=withdrawal_data.jazzcash_number
+        jazzcash_number=withdrawal_data.jazzcash_number,
     )
-    
+
     withdrawal_dict = withdrawal.model_dump()
     withdrawal_dict["created_at"] = withdrawal_dict["created_at"].isoformat()
-    
+
     await db.withdrawals.insert_one(withdrawal_dict)
+
+    # Create transaction record (pending)
+    txn = Transaction(
+        user_id=current_user["user_id"],
+        type=TransactionType.WITHDRAWAL,
+        amount=withdrawal_data.amount,
+        status=TransactionStatus.PENDING,
+        description=f"Withdrawal initiated (secure processing) - JazzCash {withdrawal_data.jazzcash_number}",
+        metadata={"withdrawal_id": withdrawal.id},
+        balance_before=available,
+        balance_after=new_available,
+    )
+
+    txn_dict = txn.model_dump()
+    txn_dict["created_at"] = txn_dict["created_at"].isoformat()
+    txn_dict["updated_at"] = txn_dict["updated_at"].isoformat()
+    await db.transactions.insert_one(txn_dict)
     
     # Send email notification to admin
     background_tasks.add_task(
@@ -135,9 +188,10 @@ async def create_withdrawal_request(
     )
     
     return {
-        "message": "Withdrawal request submitted successfully",
+        "message": "Withdrawal initiated successfully",
         "withdrawal_id": withdrawal.id,
-        "status": "pending"
+        "status": "pending",
+        "currency": "PKR"
     }
 
 @router.get("/withdrawals", response_model=List[Withdrawal])
