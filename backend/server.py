@@ -38,6 +38,7 @@ api_router.include_router(user_routes.router)
 api_router.include_router(payment_routes.router)
 api_router.include_router(admin_routes.router)
 api_router.include_router(game_routes.router)
+api_router.include_router(wallet_routes.router)
 
 # Include the router in the main app
 app.include_router(api_router)
