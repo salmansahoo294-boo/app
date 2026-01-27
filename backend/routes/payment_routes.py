@@ -106,11 +106,11 @@ async def create_withdrawal_request(
     if user.get("wallet_balance", 0) < withdrawal_data.amount:
         raise HTTPException(status_code=400, detail="Insufficient balance")
     
-    if withdrawal_data.amount < 500:
-        raise HTTPException(status_code=400, detail="Minimum withdrawal amount is PKR 500")
-    
-    if withdrawal_data.amount > 500000:
-        raise HTTPException(status_code=400, detail="Maximum withdrawal amount is PKR 500,000")
+    if withdrawal_data.amount < 300:
+        raise HTTPException(status_code=400, detail="Minimum withdrawal amount is PKR 300")
+
+    if withdrawal_data.amount > 30000:
+        raise HTTPException(status_code=400, detail="Maximum withdrawal amount is PKR 30,000")
     
     # Create withdrawal record
     withdrawal = Withdrawal(
