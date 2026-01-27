@@ -163,8 +163,8 @@ async def approve_deposit(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    # Update user balance
-    new_balance = user.get("wallet_balance", 0.0) + deposit["amount"]
+    # Update user balance (Phase 2 trust model: approved deposits move into locked_balance first)
+    new_locked = user.get("locked_balance", 0.0) + deposit["amount"]
     new_total_deposits = user.get("total_deposits", 0.0) + deposit["amount"]
     
     await db.users.update_one(
