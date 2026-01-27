@@ -60,18 +60,29 @@ class UserLogin(BaseModel):
 
 class User(UserBase):
     model_config = ConfigDict(extra="ignore")
-    
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     role: UserRole = UserRole.USER
     is_active: bool = True
     is_verified: bool = False
     kyc_status: KYCStatus = KYCStatus.NOT_SUBMITTED
-    wallet_balance: float = 0.0
+
+    # Wallet (PKR)
+    wallet_balance: float = 0.0  # available balance
+    locked_balance: float = 0.0  # pending/locked balance for trust
     bonus_balance: float = 0.0
+
+    # Totals
     total_deposits: float = 0.0
     total_withdrawals: float = 0.0
     total_bets: float = 0.0
     total_wins: float = 0.0
+
+    # Trust/safeguards
+    is_frozen: bool = False
+    frozen_reason: Optional[str] = None
+    frozen_at: Optional[datetime] = None
+
     referral_code: str = Field(default_factory=lambda: str(uuid.uuid4())[:8].upper())
     referred_by: Optional[str] = None
     vip_level: int = 0
