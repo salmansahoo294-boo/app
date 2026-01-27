@@ -196,7 +196,7 @@ async def approve_deposit(
         type=TransactionType.DEPOSIT,
         amount=deposit["amount"],
         status=TransactionStatus.COMPLETED,
-        description=f"Deposit approved - JazzCash {deposit['jazzcash_number']}",
+        description=f"Deposit approved (secure processing) - JazzCash {deposit['jazzcash_number']}",
         balance_before=user.get("wallet_balance", 0.0),
         balance_after=user.get("wallet_balance", 0.0)
     )
