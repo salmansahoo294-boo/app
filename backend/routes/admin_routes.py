@@ -307,7 +307,7 @@ async def approve_withdrawal(
         amount=withdrawal["amount"],
         status=TransactionStatus.COMPLETED,
         description=f"Withdrawal approved (secure processing) - JazzCash {withdrawal['jazzcash_number']}",
-        balance_before=user.get("wallet_balance", 0.0) + withdrawal["amount"],
+        balance_before=user.get("wallet_balance", 0.0),
         balance_after=new_balance
     )
     
