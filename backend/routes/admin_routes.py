@@ -273,15 +273,19 @@ async def approve_withdrawal(
     if user.get("wallet_balance", 0.0) < withdrawal["amount"]:
         raise HTTPException(status_code=400, detail="Insufficient user balance")
     
-    # Update user balance (Phase 2 trust model: withdrawals deduct from available balance)
-    new_balance = user.get("wallet_balance", 0.0) - withdrawal["amount"]
+    # Update user balance (Phase 2 trust model: approved withdrawal releases locked funds)
+    locked = user.get("locked_balance", 0.0)
+    if locked < withdrawal["amount"]:
+        raise HTTPException(status_code=400, detail="User does not have enough locked funds")
+
+    new_locked = locked - withdrawal["amount"]
     new_total_withdrawals = user.get("total_withdrawals", 0.0) + withdrawal["amount"]
-    
+
     await db.users.update_one(
         {"id": withdrawal["user_id"]},
         {
             "$set": {
-                "wallet_balance": new_balance,
+                "locked_balance": new_locked,
                 "total_withdrawals": new_total_withdrawals,
                 "updated_at": datetime.now(timezone.utc).isoformat()
             }
