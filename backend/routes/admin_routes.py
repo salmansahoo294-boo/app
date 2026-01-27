@@ -166,12 +166,12 @@ async def approve_deposit(
     # Update user balance (Phase 2 trust model: approved deposits move into locked_balance first)
     new_locked = user.get("locked_balance", 0.0) + deposit["amount"]
     new_total_deposits = user.get("total_deposits", 0.0) + deposit["amount"]
-    
+
     await db.users.update_one(
         {"id": deposit["user_id"]},
         {
             "$set": {
-                "wallet_balance": new_balance,
+                "locked_balance": new_locked,
                 "total_deposits": new_total_deposits,
                 "updated_at": datetime.now(timezone.utc).isoformat()
             }
