@@ -119,7 +119,7 @@ export default function Landing() {
 
             <p className="mt-5 text-sm md:text-base text-white/70 max-w-2xl">
               Inspired by the best — built for a clean, user‑friendly experience with a premium dark casino UI.
-              Deposit via JazzCash (manual approval for now) and start playing.
+              Deposit via JazzCash and start playing.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
