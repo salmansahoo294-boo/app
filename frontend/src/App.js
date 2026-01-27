@@ -9,6 +9,7 @@ import Home from './pages/Home';
 import Wallet from './pages/Wallet';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
+import CrashGame from './pages/CrashGame';
 import "./App.css";
 
 // Protected Route Component
