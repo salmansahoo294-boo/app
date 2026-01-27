@@ -23,11 +23,11 @@ async def create_deposit_request(
     db: AsyncIOMotorDatabase = Depends(get_db)
 ):
     """Create deposit request"""
-    if deposit_data.amount < 100:
-        raise HTTPException(status_code=400, detail="Minimum deposit amount is PKR 100")
-    
-    if deposit_data.amount > 1000000:
-        raise HTTPException(status_code=400, detail="Maximum deposit amount is PKR 1,000,000")
+    if deposit_data.amount < 300:
+        raise HTTPException(status_code=400, detail="Minimum deposit amount is PKR 300")
+
+    if deposit_data.amount > 50000:
+        raise HTTPException(status_code=400, detail="Maximum deposit amount is PKR 50,000")
     
     # Get user info
     user = await db.users.find_one({"id": current_user["user_id"]}, {"_id": 0})
