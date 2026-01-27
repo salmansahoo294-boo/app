@@ -273,7 +273,7 @@ async def approve_withdrawal(
     if user.get("wallet_balance", 0.0) < withdrawal["amount"]:
         raise HTTPException(status_code=400, detail="Insufficient user balance")
     
-    # Update user balance
+    # Update user balance (Phase 2 trust model: withdrawals deduct from available balance)
     new_balance = user.get("wallet_balance", 0.0) - withdrawal["amount"]
     new_total_withdrawals = user.get("total_withdrawals", 0.0) + withdrawal["amount"]
     
