@@ -373,12 +373,12 @@ async def update_game_settings(
     settings_dict = settings.model_dump()
     settings_dict["updated_at"] = datetime.now(timezone.utc).isoformat()
     
-    result = await db.game_settings.update_one(
+    await db.game_settings.update_one(
         {"game_id": game_id},
         {"$set": settings_dict},
         upsert=True
     )
-    
+
     return {"message": "Game settings updated successfully"}
 
 # Notification Management
