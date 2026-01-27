@@ -115,17 +115,27 @@ export default function Wallet() {
                 </div>
               )}
 
-              <div className="mt-6 grid grid-cols-2 gap-4">
+              <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-[11px] uppercase tracking-widest text-white/50">Main Wallet</div>
+                  <div className="text-[11px] uppercase tracking-widest text-white/50">Available</div>
                   {loading ? (
                     <Skeleton className="mt-2 h-6 w-28" />
                   ) : (
                     <div className="mt-1 font-numbers text-white" data-testid="main-balance">
-                      PKR {balance?.wallet_balance?.toLocaleString() || '0'}
+                      PKR {balance?.available_balance?.toLocaleString() || '0'}
                     </div>
                   )}
                 </div>
+
+                <div className="rounded-xl border border-white/10 bg-black/20 p-4">
+                  <div className="text-[11px] uppercase tracking-widest text-white/50">Pending</div>
+                  {loading ? (
+                    <Skeleton className="mt-2 h-6 w-24" />
+                  ) : (
+                    <div className="mt-1 font-numbers text-white">PKR {balance?.locked_balance?.toLocaleString() || '0'}</div>
+                  )}
+                </div>
+
                 <div className="rounded-xl border border-white/10 bg-black/20 p-4">
                   <div className="text-[11px] uppercase tracking-widest text-white/50">Bonus</div>
                   {loading ? (
