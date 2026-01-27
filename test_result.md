@@ -154,15 +154,18 @@
 ## frontend:
 ##   - task: "Phase 2 UI: Crash game page + lobby link + wallet shows pending/available balances"
 ##     implemented: true
-##     working: false
+##     working: true
 ##     file: "/app/frontend/src/pages/CrashGame.jsx"
 ##     stuck_count: 0
 ##     priority: "high"
-##     needs_retesting: true
+##     needs_retesting: false
 ##     status_history:
 ##       - working: "NA"
 ##         agent: "main"
 ##         comment: "Added /games/crash route and CrashGame UI; Home routes Aviator/Crash cards to /games/crash; Wallet displays Available/Pending/Bonus."
+##       - working: true
+##         agent: "testing"
+##         comment: "✅ COMPREHENSIVE PHASE 2 TESTING COMPLETED: 1) User registration works - redirects to /home ✅ 2) Home page Aviator card navigates to /games/crash successfully ✅ 3) Crash game page renders with proper UI - balance display, bet input, slider, Place Bet button all functional ✅ 4) Wallet Balance tab displays Available/Pending/Bonus values correctly ✅ 5) Deposit request creation works - form submission successful with toast confirmation ✅ 6) Admin login works with admin@winpkr.com/Admin@123 credentials ✅ 7) Admin dashboard shows pending deposits and approval functionality works ✅ 8) After admin approval, user balance correctly updates from PKR 0 to PKR 1,000 ✅ 9) Complete deposit flow tested end-to-end successfully ✅ All Phase 2 UI and integration features working perfectly!"
 
 ## backend:
 ##   - task: "Phase 2 core API: Crash game (provably fair) + admin-configurable settings + daily bet limit + auto-freeze"
