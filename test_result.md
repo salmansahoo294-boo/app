@@ -207,6 +207,19 @@
 ##         agent: "testing"
 ##         comment: "COMPREHENSIVE RE-TESTING COMPLETED: 1) Admin login works perfectly 2) Settings dialog loads values without errors (Daily Bet Limit: 120000, House Edge: 4) 3) Settings can be modified and saved successfully with toast confirmation 4) Settings dialog closes properly after save 5) User freeze/unfreeze functionality works (found 6 users, successfully froze user with toast confirmation) 6) Bottom navigation includes Activity link for normal users 7) Activity link opens /transactions page correctly 8) Transaction page displays proper title/subtitle and shows appropriate content (empty state for new users with correct description). All requested flows working perfectly after latest changes."
 
+## backend:
+##   - task: "Admin health endpoint /api/admin/health/db for deployment verification"
+##     implemented: true
+##     working: true
+##     file: "/app/backend/routes/admin_routes.py"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: false
+##     status_history:
+##       - working: true
+##         agent: "testing"
+##         comment: "✅ REGRESSION TEST COMPLETED SUCCESSFULLY: 1) New /api/admin/health/db endpoint working perfectly - Status: 200, ok: true ✅ 2) DB health check returns proper details: DB Name: test_database, all required collections present (users, deposits, withdrawals, transactions, bets, system_settings), no missing collections, proper indexes configured ✅ 3) Admin login (admin@winpkr.com/Admin@123) works correctly ✅ 4) Admin dashboard loads with 22 dashboard elements, stats display properly ✅ 5) Settings dialog opens and closes successfully ✅ 6) All existing flows verified working after health endpoint addition ✅ No regressions detected, new endpoint fully functional."
+
 ## agent_communication:
   - agent: "main"
     message: "Please run frontend e2e checks: Landing renders styled, CTA buttons navigate to /auth, login works, protected routing to /home works, and no blank/unstyled sections. Admin login redirect to /admin sanity."
@@ -218,3 +231,5 @@
     message: "PHASE 2 COMPREHENSIVE TESTING COMPLETED SUCCESSFULLY! Full end-to-end testing verified: 1) User registration works perfectly - redirects to /home 2) Home page Aviator card navigation to /games/crash successful 3) Crash game page renders with proper UI, betting functionality works (bet input, slider, Place Bet button) 4) Wallet Balance tab correctly displays Available/Pending/Bonus values 5) Deposit request creation works with form validation and success toast 6) Admin login (admin@winpkr.com/Admin@123) works, dashboard shows pending deposits 7) Admin deposit approval functionality works with success confirmation 8) User balance correctly updates from PKR 0 to PKR 1,000 after admin approval 9) Complete deposit approval workflow tested end-to-end successfully. All Phase 2 UI paths and wallet pending/available balance features working perfectly! Main agent can proceed to summarize and finish."
   - agent: "testing"
     message: "ADMIN SETTINGS & TRANSACTION ACTIVITY RE-TESTING COMPLETED! Comprehensive testing of latest changes verified: 1) Admin login (admin@winpkr.com/Admin@123) works perfectly 2) Settings dialog loads values without errors (Daily Bet Limit: 120000, House Edge: 4) 3) Settings can be modified (changed daily bet limit to 150000, house edge to 4%) and saved successfully with toast confirmation 4) Settings dialog closes properly after save 5) User freeze/unfreeze functionality works (found 6 users, successfully froze user with toast confirmation) 6) Bottom navigation includes Activity link for normal users 7) Activity link opens /transactions page correctly 8) Transaction page displays proper title/subtitle and shows appropriate content (empty state for new users with correct description). All requested flows working perfectly after latest changes!"
+  - agent: "testing"
+    message: "✅ REGRESSION TEST FOR /api/admin/health/db ENDPOINT COMPLETED SUCCESSFULLY! Quick regression test after adding backend health endpoint verified: 1) Admin login (admin@winpkr.com/Admin@123) works perfectly ✅ 2) New /api/admin/health/db endpoint returns Status: 200, ok: true with proper DB health details ✅ 3) DB health shows: test_database, all required collections present, no missing collections, proper indexes configured ✅ 4) Admin dashboard loads correctly with 22 dashboard elements ✅ 5) Settings dialog opens and closes successfully ✅ 6) All existing flows continue to work after health endpoint addition ✅ No regressions detected, new health endpoint fully functional for deployment verification."
