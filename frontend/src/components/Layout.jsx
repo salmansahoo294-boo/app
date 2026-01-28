@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
     { icon: Home, label: 'Home', path: '/home', testId: 'nav-home' },
     { icon: Gamepad2, label: 'Games', path: '/home#games', testId: 'nav-games' },
     { icon: Wallet, label: 'Wallet', path: '/wallet', testId: 'nav-wallet' },
-    { icon: User, label: 'Profile', path: '/profile', testId: 'nav-profile' },
+    { icon: List, label: 'Activity', path: '/transactions', testId: 'nav-transactions' },
   ];
 
   const adminNavItems = [
