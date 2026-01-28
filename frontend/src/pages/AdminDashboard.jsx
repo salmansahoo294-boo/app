@@ -201,21 +201,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Pending Deposits */}
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
-          <div className="font-primary text-white text-lg">Pending Deposits</div>
-          <div className="mt-4 space-y-3">
-            {loading ? (
-              <>
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-              </>
-            ) : pendingDeposits.length === 0 ? (
-              <EmptyState title="No pending deposits" description="All caught up." />
-            ) : (
-              pendingDeposits.map((deposit) => (
-                <div
-
         {/* Users (Freeze/Unfreeze) */}
         <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
           <div className="flex items-center justify-between gap-4">
@@ -257,6 +242,20 @@ export default function AdminDashboard() {
           </div>
         </div>
 
+        {/* Pending Deposits */}
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
+          <div className="font-primary text-white text-lg">Pending Deposits</div>
+          <div className="mt-4 space-y-3">
+            {loading ? (
+              <>
+                <Skeleton className="h-16 w-full" />
+                <Skeleton className="h-16 w-full" />
+              </>
+            ) : pendingDeposits.length === 0 ? (
+              <EmptyState title="No pending deposits" description="All caught up." />
+            ) : (
+              pendingDeposits.map((deposit) => (
+                <div
                   key={deposit.id}
                   className="rounded-2xl border border-white/10 bg-black/20 p-4"
                   data-testid={`deposit-${deposit.id}`}
