@@ -84,6 +84,13 @@ export default function AdminDashboard() {
     try {
 
   const handleFreezeToggle = async (u) => {
+
+      <AdminSettingsDialog
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        onSaved={loadData}
+      />
+
     try {
       if (u.is_frozen) {
         await adminAPI.unfreezeUser(u.id);
