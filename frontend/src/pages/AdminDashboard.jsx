@@ -129,6 +129,13 @@ export default function AdminDashboard() {
         </Button>
       }
     >
+
+      <AdminSettingsDialog
+        open={settingsOpen}
+        onOpenChange={setSettingsOpen}
+        onSaved={loadData}
+      />
+
       <div className="space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
