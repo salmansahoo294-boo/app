@@ -71,8 +71,8 @@ export const gamesAPI = {
   verifyCrash: (params) => api.get('/games/crash/verify', { params }),
   placeCrashBet: (data) => api.post('/games/crash/bet', data),
   getGameSettings: () => api.get('/games/settings'),
-  getAdminSettings: () => api.get('/games/admin/settings'),
-  updateAdminSettings: (data) => api.post('/games/admin/settings', data),
+  getAdminSettings: () => api.get('/admin/settings'),
+  updateAdminSettings: (data) => api.post('/admin/settings', data),
 };
 
 export const adminAPI = {
