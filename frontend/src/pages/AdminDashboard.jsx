@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { adminAPI } from '../utils/api';
 import { Button } from '../components/ui/button';
-import { Users, Clock, TrendingUp, CheckCircle, XCircle } from 'lucide-react';
+import { Users, Clock, TrendingUp, CheckCircle, XCircle, Settings, UserX } from 'lucide-react';
 import { toast } from 'sonner';
 import { PageShell } from '../components/PageShell';
 import { Skeleton } from '../components/ui/skeleton';
