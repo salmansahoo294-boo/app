@@ -45,6 +45,8 @@ api_router.include_router(admin_settings_routes.router)
 # Include the router in the main app
 app.include_router(api_router)
 
+app.add_middleware(HttpsRedirectFixMiddleware)
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
