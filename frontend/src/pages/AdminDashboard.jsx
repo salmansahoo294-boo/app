@@ -33,6 +33,8 @@ export default function AdminDashboard() {
       setStats(statsRes.data);
       setPendingDeposits(depositsRes.data);
       setPendingWithdrawals(withdrawalsRes.data);
+      setUsers(usersRes.data);
+      setUsersLoading(false);
     } catch (error) {
       console.error('Error loading admin data:', error);
       toast.error('Failed to load admin data');
