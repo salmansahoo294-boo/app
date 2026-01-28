@@ -82,15 +82,15 @@ export default function AdminDashboard() {
     if (!reason) return;
 
     try {
+      await adminAPI.rejectWithdrawal(withdrawalId, reason);
+      toast.success('Withdrawal rejected');
+      loadData();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to reject withdrawal');
+    }
+  };
 
   const handleFreezeToggle = async (u) => {
-
-      <AdminSettingsDialog
-        open={settingsOpen}
-        onOpenChange={setSettingsOpen}
-        onSaved={loadData}
-      />
-
     try {
       if (u.is_frozen) {
         await adminAPI.unfreezeUser(u.id);
@@ -103,14 +103,6 @@ export default function AdminDashboard() {
       loadData();
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to update user');
-    }
-  };
-
-      await adminAPI.rejectWithdrawal(withdrawalId, reason);
-      toast.success('Withdrawal rejected');
-      loadData();
-    } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to reject withdrawal');
     }
   };
 
