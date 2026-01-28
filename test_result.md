@@ -195,3 +195,26 @@
 ##       - working: true
 ##         agent: "testing"
 ##         comment: "Full e2e verified: Landing/Auth/Home/Wallet/Profile/Admin. Mobile viewport OK."
+##   - task: "Admin settings UI and transaction activity page after latest changes"
+##     implemented: true
+##     working: true
+##     file: "/app/frontend/src/components/AdminSettingsDialog.jsx"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: false
+##     status_history:
+##       - working: true
+##         agent: "testing"
+##         comment: "COMPREHENSIVE RE-TESTING COMPLETED: 1) Admin login works perfectly 2) Settings dialog loads values without errors (Daily Bet Limit: 120000, House Edge: 4) 3) Settings can be modified and saved successfully with toast confirmation 4) Settings dialog closes properly after save 5) User freeze/unfreeze functionality works (found 6 users, successfully froze user with toast confirmation) 6) Bottom navigation includes Activity link for normal users 7) Activity link opens /transactions page correctly 8) Transaction page displays proper title/subtitle and shows appropriate content (empty state for new users with correct description). All requested flows working perfectly after latest changes."
+
+## agent_communication:
+  - agent: "main"
+    message: "Please run frontend e2e checks: Landing renders styled, CTA buttons navigate to /auth, login works, protected routing to /home works, and no blank/unstyled sections. Admin login redirect to /admin sanity."
+  - agent: "testing"
+    message: "ALL FRONTEND E2E TESTS PASSED SUCCESSFULLY! Landing page premium styling verified, WINPKR branding correct, authentication flows working (both admin and user), navigation functional, no critical errors. The premium gambling UI is fully functional and ready for production. Main agent can proceed to summarize and finish this phase."
+  - agent: "testing"
+    message: "PHASE 1 POLISH RE-TESTING COMPLETED SUCCESSFULLY! Comprehensive testing covered: 1) Landing page renders with premium styling, WINPKR HUB branding visible, CTA buttons work perfectly 2) Admin login (admin@winpkr.com/Admin@123) works, dashboard loads with stats, approve/reject buttons present, bottom nav pill style confirmed 3) User registration and login flows work, redirects properly 4) Home page shows wallet preview, stats, game cards (12 found), loading skeletons handled properly, no layout breaks 5) Wallet tabs (Balance/Deposit/Withdraw) work perfectly, empty states show correctly, deposit/withdraw API calls work without crashes 6) Profile page loads with placeholders/skeleton handling, logout works 7) Mobile viewport (390x800) testing passed - landing renders, home/wallet layouts work, bottom nav positioned correctly (Y:710 < 800) 8) No critical console errors found (PostHog/WS warnings ignored as requested). All Phase 1 polish requirements verified and working perfectly!"
+  - agent: "testing"
+    message: "PHASE 2 COMPREHENSIVE TESTING COMPLETED SUCCESSFULLY! Full end-to-end testing verified: 1) User registration works perfectly - redirects to /home 2) Home page Aviator card navigation to /games/crash successful 3) Crash game page renders with proper UI, betting functionality works (bet input, slider, Place Bet button) 4) Wallet Balance tab correctly displays Available/Pending/Bonus values 5) Deposit request creation works with form validation and success toast 6) Admin login (admin@winpkr.com/Admin@123) works, dashboard shows pending deposits 7) Admin deposit approval functionality works with success confirmation 8) User balance correctly updates from PKR 0 to PKR 1,000 after admin approval 9) Complete deposit approval workflow tested end-to-end successfully. All Phase 2 UI paths and wallet pending/available balance features working perfectly! Main agent can proceed to summarize and finish."
+  - agent: "testing"
+    message: "ADMIN SETTINGS & TRANSACTION ACTIVITY RE-TESTING COMPLETED! Comprehensive testing of latest changes verified: 1) Admin login (admin@winpkr.com/Admin@123) works perfectly 2) Settings dialog loads values without errors (Daily Bet Limit: 120000, House Edge: 4) 3) Settings can be modified (changed daily bet limit to 150000, house edge to 4%) and saved successfully with toast confirmation 4) Settings dialog closes properly after save 5) User freeze/unfreeze functionality works (found 6 users, successfully froze user with toast confirmation) 6) Bottom navigation includes Activity link for normal users 7) Activity link opens /transactions page correctly 8) Transaction page displays proper title/subtitle and shows appropriate content (empty state for new users with correct description). All requested flows working perfectly after latest changes!"
