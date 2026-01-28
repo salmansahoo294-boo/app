@@ -215,6 +215,48 @@ export default function AdminDashboard() {
             ) : (
               pendingDeposits.map((deposit) => (
                 <div
+
+        {/* Users (Freeze/Unfreeze) */}
+        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <div className="font-primary text-white text-lg">Users</div>
+              <div className="text-sm text-white/60 mt-1">Freeze suspicious users (safeguard).</div>
+            </div>
+          </div>
+
+          <div className="mt-4 space-y-3">
+            {usersLoading ? (
+              <>
+                <Skeleton className="h-14 w-full" />
+                <Skeleton className="h-14 w-full" />
+              </>
+            ) : users.length === 0 ? (
+              <EmptyState title="No users" description="No players found." />
+            ) : (
+              users.map((u) => (
+                <div key={u.id} className="rounded-2xl border border-white/10 bg-black/20 p-4 flex items-center justify-between gap-4">
+                  <div>
+                    <div className="text-white text-sm">{u.email}</div>
+                    <div className="text-xs text-white/45 mt-1">
+                      Status: {u.is_frozen ? 'Frozen' : (u.is_active ? 'Active' : 'Suspended')}
+                    </div>
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={() => handleFreezeToggle(u)}
+                    className={`rounded-full ${u.is_frozen ? 'bg-white/5 border border-white/10 text-white hover:bg-white/10' : 'bg-neon-red text-white hover:bg-neon-red/90'}`}
+                    data-testid={`toggle-freeze-${u.id}`}
+                  >
+                    <UserX className="w-4 h-4 mr-1" />
+                    {u.is_frozen ? 'Unfreeze' : 'Freeze'}
+                  </Button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
                   key={deposit.id}
                   className="rounded-2xl border border-white/10 bg-black/20 p-4"
                   data-testid={`deposit-${deposit.id}`}
