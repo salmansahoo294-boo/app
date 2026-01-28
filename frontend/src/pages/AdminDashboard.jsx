@@ -24,10 +24,11 @@ export default function AdminDashboard() {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [statsRes, depositsRes, withdrawalsRes] = await Promise.all([
+      const [statsRes, depositsRes, withdrawalsRes, usersRes] = await Promise.all([
         adminAPI.getDashboardStats(),
         adminAPI.getPendingDeposits(),
         adminAPI.getPendingWithdrawals(),
+        adminAPI.getUsers({ limit: 20 }),
       ]);
       setStats(statsRes.data);
       setPendingDeposits(depositsRes.data);
