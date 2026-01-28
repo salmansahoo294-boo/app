@@ -38,6 +38,7 @@ export default function AdminDashboard() {
     } catch (error) {
       console.error('Error loading admin data:', error);
       toast.error('Failed to load admin data');
+      setUsersLoading(false);
     } finally {
       setLoading(false);
     }
