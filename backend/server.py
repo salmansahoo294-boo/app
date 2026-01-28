@@ -1,6 +1,7 @@
 from fastapi import FastAPI, APIRouter
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
+from middleware.https_redirect_fix import HttpsRedirectFixMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
