@@ -15,6 +15,52 @@ def get_db() -> AsyncIOMotorDatabase:
     from server import db
     return db
 
+
+@router.get("/health/db")
+async def admin_db_health(
+    current_admin: dict = Depends(get_current_admin),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Deployment health check: verifies DB connection, key collections, and indexes exist."""
+
+    collection_names = await db.list_collection_names()
+
+    required_collections = [
+        "users",
+        "deposits",
+        "withdrawals",
+        "transactions",
+        "bets",
+        "system_settings",
+    ]
+
+    missing_collections = [c for c in required_collections if c not in collection_names]
+
+    # Index checks (non-fatal if missing, but helpful post-deploy)
+    users_indexes = await db.users.index_information()
+    system_settings_indexes = await db.system_settings.index_information() if "system_settings" in collection_names else {}
+
+    users_has_email_unique = any(
+        idx.get("key") == [("email", 1)] and idx.get("unique")
+        for idx in users_indexes.values()
+    )
+
+    system_settings_has_setting_key_unique = any(
+        idx.get("key") == [("setting_key", 1)] and idx.get("unique")
+        for idx in system_settings_indexes.values()
+    )
+
+    return {
+        "ok": len(missing_collections) == 0,
+        "db_name": db.name,
+        "required_collections": required_collections,
+        "missing_collections": missing_collections,
+        "indexes": {
+            "users_email_unique": users_has_email_unique,
+            "system_settings_setting_key_unique": system_settings_has_setting_key_unique,
+        },
+    }
+
 # Dashboard Stats
 @router.get("/stats/dashboard")
 async def get_dashboard_stats(
