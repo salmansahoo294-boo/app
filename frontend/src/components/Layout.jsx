@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Gamepad2, Wallet, User, Shield } from 'lucide-react';
+import { Home, Gamepad2, Wallet, User, Shield, List } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const Layout = ({ children }) => {
