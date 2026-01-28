@@ -129,11 +129,62 @@ async def activate_user(
         {"id": user_id, "role": "user"},
         {"$set": {"is_active": True, "updated_at": datetime.now(timezone.utc).isoformat()}}
     )
-    
+
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="User not found")
-    
+
     return {"message": "User activated successfully"}
+
+
+@router.put("/users/{user_id}/freeze")
+async def freeze_user(
+    user_id: str,
+    reason: str = "Frozen by admin",
+    current_admin: dict = Depends(get_current_admin),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Freeze user account (suspicious activity)"""
+    result = await db.users.update_one(
+        {"id": user_id, "role": "user"},
+        {
+            "$set": {
+                "is_frozen": True,
+                "frozen_reason": reason,
+                "frozen_at": datetime.now(timezone.utc).isoformat(),
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }
+        },
+    )
+
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return {"message": "User frozen"}
+
+
+@router.put("/users/{user_id}/unfreeze")
+async def unfreeze_user(
+    user_id: str,
+    current_admin: dict = Depends(get_current_admin),
+    db: AsyncIOMotorDatabase = Depends(get_db)
+):
+    """Unfreeze user account"""
+    result = await db.users.update_one(
+        {"id": user_id, "role": "user"},
+        {
+            "$set": {
+                "is_frozen": False,
+                "frozen_reason": None,
+                "frozen_at": None,
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }
+        },
+    )
+
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    return {"message": "User unfrozen"}
 
 # Deposit Management
 @router.get("/deposits/pending", response_model=List[Deposit])
