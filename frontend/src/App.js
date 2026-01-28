@@ -10,6 +10,7 @@ import Wallet from './pages/Wallet';
 import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import CrashGame from './pages/CrashGame';
+import Transactions from './pages/Transactions';
 import "./App.css";
 
 // Protected Route Component
