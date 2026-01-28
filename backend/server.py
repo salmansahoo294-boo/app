@@ -10,7 +10,7 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # Import routes AFTER loading environment variables
-from routes import auth_routes, user_routes, payment_routes, admin_routes, game_routes, wallet_routes
+from routes import auth_routes, user_routes, payment_routes, admin_routes, game_routes, wallet_routes, admin_settings_routes
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
