@@ -82,6 +82,23 @@ export default function AdminDashboard() {
     if (!reason) return;
 
     try {
+
+  const handleFreezeToggle = async (u) => {
+    try {
+      if (u.is_frozen) {
+        await adminAPI.unfreezeUser(u.id);
+        toast.success('User unfrozen');
+      } else {
+        const reason = prompt('Freeze reason (optional):') || 'Frozen by admin';
+        await adminAPI.freezeUser(u.id, reason);
+        toast.success('User frozen');
+      }
+      loadData();
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to update user');
+    }
+  };
+
       await adminAPI.rejectWithdrawal(withdrawalId, reason);
       toast.success('Withdrawal rejected');
       loadData();
