@@ -108,7 +108,20 @@ export default function AdminDashboard() {
   };
 
   return (
-    <PageShell title="Admin Dashboard" subtitle="Monitor players and approvals.">
+    <PageShell
+      title="Admin Dashboard"
+      subtitle="Monitor players, approvals, and platform settings."
+      rightSlot={
+        <Button
+          onClick={() => setSettingsOpen(true)}
+          className="rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10"
+          data-testid="admin-open-settings"
+        >
+          <Settings className="h-4 w-4 mr-2 text-gold" />
+          Settings
+        </Button>
+      }
+    >
       <div className="space-y-6">
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
