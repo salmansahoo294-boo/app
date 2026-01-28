@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { PageShell } from '../components/PageShell';
 import { Skeleton } from '../components/ui/skeleton';
 import { EmptyState } from '../components/EmptyState';
+import { AdminSettingsDialog } from '../components/AdminSettingsDialog';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
