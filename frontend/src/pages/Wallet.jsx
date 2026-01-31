@@ -268,14 +268,15 @@ export default function Wallet() {
                 <Input
                   id="withdraw-amount"
                   type="number"
-                  min="500"
-                  max="500000"
+                  min="300"
+                  max="30000"
                   required
                   value={withdrawForm.amount}
                   onChange={(e) => setWithdrawForm({ ...withdrawForm, amount: e.target.value })}
                   className="bg-black/40 border-white/10 text-white"
-                  placeholder="Minimum 500"
+                  placeholder="Minimum 300"
                   data-testid="withdraw-amount-input"
+                  disabled={!!wagering?.has_active_wagering}
                 />
                 <div className="text-xs text-white/45">Min: PKR 500 • Max: PKR 500,000</div>
               </div>
