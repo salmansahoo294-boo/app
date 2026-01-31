@@ -47,8 +47,9 @@ export default function Wallet() {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [balanceRes, depositsRes, withdrawalsRes] = await Promise.all([
+      const [balanceRes, wageringRes, depositsRes, withdrawalsRes] = await Promise.all([
         userAPI.getWalletBalance(),
+        wageringAPI.status(),
         paymentAPI.getDeposits({ limit: 20 }),
         paymentAPI.getWithdrawals({ limit: 20 }),
       ]);
