@@ -220,6 +220,22 @@
 ##         agent: "testing"
 ##         comment: "✅ REGRESSION TEST COMPLETED SUCCESSFULLY: 1) New /api/admin/health/db endpoint working perfectly - Status: 200, ok: true ✅ 2) DB health check returns proper details: DB Name: test_database, all required collections present (users, deposits, withdrawals, transactions, bets, system_settings), no missing collections, proper indexes configured ✅ 3) Admin login (admin@winpkr.com/Admin@123) works correctly ✅ 4) Admin dashboard loads with 22 dashboard elements, stats display properly ✅ 5) Settings dialog opens and closes successfully ✅ 6) All existing flows verified working after health endpoint addition ✅ No regressions detected, new endpoint fully functional."
 
+## backend:
+  - task: "Phase 2 wagering system + promotions + withdrawal blocking"
+    implemented: true
+    working: true
+    file: "/app/backend/services/wagering_service.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented wagering system with deposit/bonus multipliers, promotion service for first_deposit_108 and daily_first_deposit_8, withdrawal blocking during active wagering."
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE PHASE 2 WAGERING + PROMOTIONS TESTING COMPLETED: 1) User registration with optional referral works ✅ 2) Deposit creation with promotion_key='first_deposit_108' and amount=100 works, returns deposit_wagering_multiplier (3-15x range) ✅ 3) Admin deposit approval creates correct wagering records: deposit wagering (7x multiplier) + bonus wagering (35x multiplier) ✅ 4) User wallet balance increases by deposit + bonus (100 + 108 = 208 PKR) ✅ 5) Withdrawal correctly blocked with 'Complete wagering requirements to withdraw' message when wagering active ✅ 6) Crash betting works and reduces wagering progress (4480 → 4430 after 50 PKR bet) ✅ 7) Daily first deposit 8% bonus works correctly: first deposit gets 8% bonus (1000 + 80), second same-day deposit gets no bonus ✅ 8) Fixed critical bug in deposit_approval_service.py where first_deposit_108 bonus was incorrectly denied due to eligibility flag logic ✅ All wagering, promotion, and withdrawal blocking functionality working perfectly!"
+
 ## agent_communication:
   - agent: "main"
     message: "Please run frontend e2e checks: Landing renders styled, CTA buttons navigate to /auth, login works, protected routing to /home works, and no blank/unstyled sections. Admin login redirect to /admin sanity."
@@ -233,3 +249,5 @@
     message: "ADMIN SETTINGS & TRANSACTION ACTIVITY RE-TESTING COMPLETED! Comprehensive testing of latest changes verified: 1) Admin login (admin@winpkr.com/Admin@123) works perfectly 2) Settings dialog loads values without errors (Daily Bet Limit: 120000, House Edge: 4) 3) Settings can be modified (changed daily bet limit to 150000, house edge to 4%) and saved successfully with toast confirmation 4) Settings dialog closes properly after save 5) User freeze/unfreeze functionality works (found 6 users, successfully froze user with toast confirmation) 6) Bottom navigation includes Activity link for normal users 7) Activity link opens /transactions page correctly 8) Transaction page displays proper title/subtitle and shows appropriate content (empty state for new users with correct description). All requested flows working perfectly after latest changes!"
   - agent: "testing"
     message: "✅ REGRESSION TEST FOR /api/admin/health/db ENDPOINT COMPLETED SUCCESSFULLY! Quick regression test after adding backend health endpoint verified: 1) Admin login (admin@winpkr.com/Admin@123) works perfectly ✅ 2) New /api/admin/health/db endpoint returns Status: 200, ok: true with proper DB health details ✅ 3) DB health shows: test_database, all required collections present, no missing collections, proper indexes configured ✅ 4) Admin dashboard loads correctly with 22 dashboard elements ✅ 5) Settings dialog opens and closes successfully ✅ 6) All existing flows continue to work after health endpoint addition ✅ No regressions detected, new health endpoint fully functional for deployment verification."
+  - agent: "testing"
+    message: "✅ PHASE 2 WAGERING + PROMOTIONS + WITHDRAWAL BLOCK TESTING COMPLETED SUCCESSFULLY! Comprehensive backend API testing verified all requested scenarios: 1) User registration with optional referral_code works perfectly ✅ 2) Deposit creation with promotion_key='first_deposit_108' and amount=100 works, returns deposit_wagering_multiplier in 3-15x range ✅ 3) Admin deposit approval creates proper wagering records: deposit wagering (7x) + bonus wagering (35x), user balance increases by deposit + bonus (208 PKR total) ✅ 4) Withdrawal correctly blocked with 'Complete wagering requirements to withdraw' message during active wagering ✅ 5) Crash betting works and progressively reduces wagering requirements ✅ 6) Daily first deposit 8% bonus works: first deposit gets bonus, second same-day deposit doesn't ✅ 7) FIXED CRITICAL BUG: first_deposit_108 bonus was incorrectly denied due to eligibility flag logic in deposit_approval_service.py ✅ All Phase 2 wagering, promotions, and withdrawal blocking functionality working perfectly!"
