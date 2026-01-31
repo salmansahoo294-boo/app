@@ -11,6 +11,14 @@ import Profile from './pages/Profile';
 import AdminDashboard from './pages/AdminDashboard';
 import CrashGame from './pages/CrashGame';
 import Transactions from './pages/Transactions';
+import Promotion from './pages/Promotion';
+import ShareEarn from './pages/ShareEarn';
+import RewardCenter from './pages/RewardCenter';
+import UserDashboard from './pages/UserDashboard';
+import VipLevel from './pages/VipLevel';
+import HelpCenter from './pages/HelpCenter';
+import Terms from './pages/Terms';
+import Language from './pages/Language';
 import "./App.css";
 
 // Protected Route Component
@@ -112,6 +120,71 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Transactions />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/promotion"
+              element={
+                <ProtectedRoute>
+                  <Promotion />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/share"
+              element={
+                <ProtectedRoute>
+                  <ShareEarn />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/rewards"
+              element={
+                <ProtectedRoute>
+                  <RewardCenter />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/vip"
+              element={
+                <ProtectedRoute>
+                  <VipLevel />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/help"
+              element={
+                <ProtectedRoute>
+                  <HelpCenter />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/language"
+              element={
+                <ProtectedRoute>
+                  <Language />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/terms"
+              element={
+                <ProtectedRoute>
+                  <Terms />
                 </ProtectedRoute>
               }
             />
