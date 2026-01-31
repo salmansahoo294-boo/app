@@ -297,7 +297,7 @@ export default function Wallet() {
 
               <Button
                 type="submit"
-                disabled={submitting}
+                disabled={submitting || !!wagering?.has_active_wagering}
                 className="w-full rounded-full bg-white/5 border border-white/10 text-white font-bold py-6 hover:bg-white/10"
                 data-testid="submit-withdraw-btn"
               >
