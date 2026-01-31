@@ -128,6 +128,8 @@ class Transaction(BaseModel):
 class DepositRequest(BaseModel):
     amount: float
     jazzcash_number: str
+    # Optional promotion identifier selected by user during deposit
+    promotion_key: Optional[str] = None
 
 class Deposit(BaseModel):
     model_config = ConfigDict(extra="ignore")
