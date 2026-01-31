@@ -11,7 +11,7 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
 # Import routes AFTER loading environment variables
-from routes import auth_routes, user_routes, payment_routes, admin_routes, game_routes, wallet_routes, admin_settings_routes
+from routes import auth_routes, user_routes, payment_routes, admin_routes, game_routes, wallet_routes, admin_settings_routes, wagering_routes, promotion_routes
 
 # MongoDB connection
 mongo_url = os.environ['MONGO_URL']
@@ -41,6 +41,8 @@ api_router.include_router(admin_routes.router)
 api_router.include_router(game_routes.router)
 api_router.include_router(wallet_routes.router)
 api_router.include_router(admin_settings_routes.router)
+api_router.include_router(wagering_routes.router)
+api_router.include_router(promotion_routes.router)
 
 # Include the router in the main app
 app.include_router(api_router)
