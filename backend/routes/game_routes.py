@@ -267,6 +267,10 @@ async def crash_place_bet(
         },
     )
 
+    # Apply wagering progress (bets count even on losses)
+    from services.wagering_service import apply_wagering_progress
+    await apply_wagering_progress(db, current_user["user_id"], amount)
+
     # If win: credit payout and add win transaction
     if won and payout > 0:
         credited_balance = new_balance + payout
