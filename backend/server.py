@@ -43,6 +43,7 @@ api_router.include_router(wallet_routes.router)
 api_router.include_router(admin_settings_routes.router)
 api_router.include_router(wagering_routes.router)
 api_router.include_router(promotion_routes.router)
+api_router.include_router(device_routes.router)
 
 # Include the router in the main app
 app.include_router(api_router)
