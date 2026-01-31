@@ -263,8 +263,7 @@ async def approve_deposit(
     # Apply promotions + wagering (Phase 2)
     from services.deposit_approval_service import approve_deposit_apply_promotions
 
-    result = await approve_deposit_apply_promotions(db, deposit, current_admin["user_id"])
-    new_balance = result["wallet_after"]
+    await approve_deposit_apply_promotions(db, deposit, current_admin["user_id"])
     
     # Update deposit status
     await db.deposits.update_one(
