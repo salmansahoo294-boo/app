@@ -43,17 +43,13 @@ async def get_wallet_balance(current_user: dict = Depends(get_current_user), db:
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    available = user.get("wallet_balance", 0.0)
-    locked = user.get("locked_balance", 0.0)
-    bonus = user.get("bonus_balance", 0.0)
+    balance = float(user.get("wallet_balance", 0.0))
 
     return {
         "currency": "PKR",
-        "wallet_balance": available,
-        "locked_balance": locked,
-        "bonus_balance": bonus,
-        "available_balance": available,
-        "total_balance": available + locked + bonus
+        "wallet_balance": balance,
+        "available_balance": balance,
+        "total_balance": balance
     }
 
 @router.get("/transactions", response_model=List[Transaction])
