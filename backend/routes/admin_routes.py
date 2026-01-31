@@ -278,22 +278,7 @@ async def approve_deposit(
         }
     )
     
-    # Create transaction record
-    transaction = Transaction(
-        user_id=deposit["user_id"],
-        type=TransactionType.DEPOSIT,
-        amount=deposit["amount"],
-        status=TransactionStatus.COMPLETED,
-        description=f"Deposit approved (secure processing) - JazzCash {deposit['jazzcash_number']}",
-        balance_before=user.get("wallet_balance", 0.0),
-        balance_after=new_balance
-    )
-    
-    transaction_dict = transaction.model_dump()
-    transaction_dict["created_at"] = transaction_dict["created_at"].isoformat()
-    transaction_dict["updated_at"] = transaction_dict["updated_at"].isoformat()
-    
-    await db.transactions.insert_one(transaction_dict)
+    # Transactions (deposit + bonus) are created in approve_deposit_apply_promotions
     
     # Send email notification to user
     background_tasks.add_task(
