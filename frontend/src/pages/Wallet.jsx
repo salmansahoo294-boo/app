@@ -31,6 +31,7 @@ export default function Wallet() {
   const initialTab = searchParams.get('tab') || 'balance';
 
   const [balance, setBalance] = useState(null);
+  const [wagering, setWagering] = useState(null);
   const [deposits, setDeposits] = useState([]);
   const [withdrawals, setWithdrawals] = useState([]);
   const [loading, setLoading] = useState(true);
