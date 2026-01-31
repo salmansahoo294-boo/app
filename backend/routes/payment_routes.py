@@ -36,8 +36,14 @@ async def create_deposit_request(
     if not user.get("is_active", True) or user.get("is_frozen"):
         raise HTTPException(status_code=403, detail="Account is not eligible for transactions")
 
+    # Deposit minimum can be lowered to PKR 100 ONLY when first-deposit-108 promo is eligible and selected.
     deposit_min = float(await _get_setting(db, "deposit_min", 300))
     deposit_max = float(await _get_setting(db, "deposit_max", 50000))
+
+    promo_key = getattr(deposit_data, "promotion_key", None)
+    first_deposit_eligible = bool(user.get("first_deposit_108_eligible", True))
+    if promo_key == "first_deposit_108" and first_deposit_eligible:
+        deposit_min = float(await _get_setting(db, "first_deposit_108_min_deposit", 100))
 
     if deposit_data.amount < deposit_min:
         raise HTTPException(status_code=400, detail=f"Minimum deposit amount is PKR {int(deposit_min)}")
