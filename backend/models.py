@@ -68,9 +68,9 @@ class User(UserBase):
     kyc_status: KYCStatus = KYCStatus.NOT_SUBMITTED
 
     # Wallet (PKR)
-    wallet_balance: float = 0.0  # available balance
-    locked_balance: float = 0.0  # pending/locked balance for trust
-    bonus_balance: float = 0.0
+    wallet_balance: float = 0.0  # visible single wallet balance
+    locked_balance: float = 0.0  # internal: locked deposit amount for wagering/withdraw gating
+    bonus_balance: float = 0.0  # internal: locked bonus amount for wagering
 
     # Totals
     total_deposits: float = 0.0
