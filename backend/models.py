@@ -147,11 +147,13 @@ class DepositRequest(BaseModel):
 
 class Deposit(BaseModel):
     model_config = ConfigDict(extra="ignore")
-    
+
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
     amount: float
     jazzcash_number: str
+    promotion_key: Optional[str] = None
+    deposit_wagering_multiplier: Optional[float] = None
     status: TransactionStatus = TransactionStatus.PENDING
     rejection_reason: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

@@ -53,17 +53,37 @@ async def create_deposit_request(
     
     # User already loaded above
     
+    # Assign deposit wagering multiplier (3x-15x) at deposit time (server-side)
+    import random
+    deposit_wagering_multiplier = float(random.randint(3, 15))
+
     # Create deposit record
     deposit = Deposit(
         user_id=current_user["user_id"],
         amount=deposit_data.amount,
-        jazzcash_number=deposit_data.jazzcash_number
+        jazzcash_number=deposit_data.jazzcash_number,
+        promotion_key=deposit_data.promotion_key,
+        deposit_wagering_multiplier=deposit_wagering_multiplier,
     )
     
     deposit_dict = deposit.model_dump()
     deposit_dict["created_at"] = deposit_dict["created_at"].isoformat()
     
     await db.deposits.insert_one(deposit_dict)
+
+    # First-deposit-108: eligibility is consumed on FIRST deposit request (claimed/skipped/rejected => never show again)
+    deposit_count = await db.deposits.count_documents({"user_id": current_user["user_id"]})
+    if deposit_count == 1 and user.get("first_deposit_108_eligible", True):
+        await db.users.update_one(
+            {"id": current_user["user_id"]},
+            {
+                "$set": {
+                    "first_deposit_108_eligible": False,
+                    "first_deposit_108_used": True,
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                }
+            },
+        )
     
     # Send email notification to admin
     background_tasks.add_task(
@@ -78,7 +98,9 @@ async def create_deposit_request(
     return {
         "message": "Deposit request submitted successfully",
         "deposit_id": deposit.id,
-        "status": "pending"
+        "status": "pending",
+        "promotion_key": deposit_data.promotion_key,
+        "deposit_wagering_multiplier": deposit_wagering_multiplier,
     }
 
 @router.get("/deposits", response_model=List[Deposit])
