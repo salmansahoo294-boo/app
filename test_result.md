@@ -153,6 +153,19 @@
 
 
 ## frontend:
+## frontend:
+  - task: "UI menus + wallet header + withdraw wagering lock testing"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/BottomNav.jsx, /app/frontend/src/components/SideMenu.jsx, /app/frontend/src/components/WalletHeader.jsx, /app/frontend/src/pages/Wallet.jsx, /app/frontend/src/pages/Promotion.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "testing"
+        comment: "✅ COMPREHENSIVE UI MENUS + WALLET HEADER + WITHDRAW WAGERING LOCK TESTING COMPLETED: 1) User registration and login works perfectly, redirects to /home ✅ 2) Bottom navigation shows all required items: Home, Promotion, Share, Rewards, Dashboard ✅ 3) Side menu contains all bottom nav items PLUS additional items: Deposit, Withdraw, VIP Level, Help Center, Language, T&Cs, Logout ✅ 4) Wallet header displays correct 'Rs {amount}' format (Rs 0 for new user) ✅ 5) Wallet header deposit and withdraw icon buttons navigate correctly to /wallet?tab=deposit and /wallet?tab=withdraw ✅ 6) Withdraw wagering lock functionality verified: For users without active wagering, withdraw form is enabled; wagering box only appears when wagering requirements exist ✅ 7) Promotion page 'More info' dialog opens and closes correctly for promotion cards ✅ All UI navigation, wallet functionality, and wagering lock behavior working as expected!"
+
 ##   - task: "Phase 2 UI: Crash game page + lobby link + wallet shows pending/available balances"
 ##     implemented: true
 ##     working: true
