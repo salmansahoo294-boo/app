@@ -148,7 +148,13 @@ async def create_withdrawal_request(
     withdraw_min = float(await _get_setting(db, "withdraw_min", 300))
     withdraw_max = float(await _get_setting(db, "withdraw_max", 30000))
 
-    # Check balance (available balance only)
+    # Block withdrawal if any wagering is active
+    from services.wagering_service import wagering_status
+    ws = await wagering_status(db, current_user["user_id"])
+    if ws["has_active_wagering"]:
+        raise HTTPException(status_code=400, detail="Complete wagering requirements to withdraw")
+
+    # Check balance
     if user.get("wallet_balance", 0) < withdrawal_data.amount:
         raise HTTPException(status_code=400, detail="Insufficient balance")
 
