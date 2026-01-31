@@ -59,9 +59,13 @@ export const userAPI = {
 // Payment APIs
 export const paymentAPI = {
   createDeposit: (data) => api.post('/payment/deposit', data),
+  createWithdrawal: (data) => api.post('/payment/withdraw', data),
   getDeposits: (params) => api.get('/payment/deposits', { params }),
-  createWithdrawal: (data) => api.post('/payment/withdrawal', data),
   getWithdrawals: (params) => api.get('/payment/withdrawals', { params }),
+};
+
+export const wageringAPI = {
+  status: () => api.get('/wagering/status'),
 };
 
 // Admin APIs
