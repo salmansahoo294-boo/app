@@ -72,6 +72,20 @@ class User(UserBase):
     locked_balance: float = 0.0  # internal: locked deposit amount for wagering/withdraw gating
     bonus_balance: float = 0.0  # internal: locked bonus amount for wagering
 
+    # Promotions / eligibility flags
+    first_deposit_108_eligible: bool = True
+    first_deposit_108_used: bool = False
+
+    daily_first_deposit_bonus_last_date: Optional[str] = None  # PK date YYYY-MM-DD
+
+    has_download_bonus: bool = False
+    download_bonus_amount: float = 0.0
+    download_bonus_at: Optional[datetime] = None
+
+    # Device identifiers (web/pwa)
+    device_fingerprint: Optional[str] = None
+    app_install_id: Optional[str] = None
+
     # Totals
     total_deposits: float = 0.0
     total_withdrawals: float = 0.0
