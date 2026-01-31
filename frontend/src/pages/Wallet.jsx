@@ -13,6 +13,8 @@ import { EmptyState } from '../components/EmptyState';
 
 const WalletStatusIcon = ({ status }) => {
   switch (status) {
+import { wageringAPI } from '../utils/api';
+
     case 'pending':
       return <Clock className="w-4 h-4 text-warning" />;
     case 'approved':
