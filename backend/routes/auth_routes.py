@@ -31,11 +31,26 @@ async def register(user_data: UserCreate, db: AsyncIOMotorDatabase = Depends(get
     user_dict["created_at"] = user_dict["created_at"].isoformat()
     user_dict["updated_at"] = user_dict["updated_at"].isoformat()
     
-    # Handle referral
+    # Handle referral (apply only at signup)
     if user_data.referral_code:
         referrer = await db.users.find_one({"referral_code": user_data.referral_code}, {"_id": 0})
-        if referrer:
+        if referrer and referrer.get("id") != user.id:
             user_dict["referred_by"] = referrer["id"]
+
+            # Create referral record (pending)
+            from services.referral_service import create_referral_record
+
+            await create_referral_record(
+                db,
+                referrer_user_id=referrer["id"],
+                referred_user_id=user.id,
+                code=user_data.referral_code,
+                signals={
+                    "device_fingerprint": user_dict.get("device_fingerprint"),
+                    "app_install_id": user_dict.get("app_install_id"),
+                    "fraud_flags": [],
+                },
+            )
     
     # Insert user
     await db.users.insert_one(user_dict)
