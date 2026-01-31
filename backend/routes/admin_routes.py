@@ -260,20 +260,11 @@ async def approve_deposit(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     
-    # Update user balance (single wallet UI)
-    new_balance = user.get("wallet_balance", 0.0) + deposit["amount"]
-    new_total_deposits = user.get("total_deposits", 0.0) + deposit["amount"]
+    # Apply promotions + wagering (Phase 2)
+    from services.deposit_approval_service import approve_deposit_apply_promotions
 
-    await db.users.update_one(
-        {"id": deposit["user_id"]},
-        {
-            "$set": {
-                "wallet_balance": new_balance,
-                "total_deposits": new_total_deposits,
-                "updated_at": datetime.now(timezone.utc).isoformat()
-            }
-        }
-    )
+    result = await approve_deposit_apply_promotions(db, deposit, current_admin["user_id"])
+    new_balance = result["wallet_after"]
     
     # Update deposit status
     await db.deposits.update_one(
