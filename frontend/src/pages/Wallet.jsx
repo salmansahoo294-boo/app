@@ -106,46 +106,17 @@ export default function Wallet() {
           <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
             <div className="absolute inset-0 opacity-60 bg-gradient-to-br from-gold/15 via-transparent to-transparent" />
             <div className="relative">
-              <div className="text-xs uppercase tracking-widest text-white/50">Total Balance</div>
+              <div className="text-xs uppercase tracking-widest text-white/50">Wallet Balance</div>
               {loading ? (
                 <Skeleton className="mt-3 h-10 w-64" />
               ) : (
                 <div className="mt-2 font-numbers text-4xl text-white" data-testid="total-balance">
-                  PKR {balance?.total_balance?.toLocaleString() || '0'}
+                  Rs {Number(balance?.wallet_balance || 0).toLocaleString()}
                 </div>
               )}
 
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-[11px] uppercase tracking-widest text-white/50">Available</div>
-                  {loading ? (
-                    <Skeleton className="mt-2 h-6 w-28" />
-                  ) : (
-                    <div className="mt-1 font-numbers text-white" data-testid="main-balance">
-                      PKR {balance?.available_balance?.toLocaleString() || '0'}
-                    </div>
-                  )}
-                </div>
-
-                <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-[11px] uppercase tracking-widest text-white/50">Pending</div>
-                  {loading ? (
-                    <Skeleton className="mt-2 h-6 w-24" />
-                  ) : (
-                    <div className="mt-1 font-numbers text-white">PKR {balance?.locked_balance?.toLocaleString() || '0'}</div>
-                  )}
-                </div>
-
-                <div className="rounded-xl border border-white/10 bg-black/20 p-4">
-                  <div className="text-[11px] uppercase tracking-widest text-white/50">Bonus</div>
-                  {loading ? (
-                    <Skeleton className="mt-2 h-6 w-24" />
-                  ) : (
-                    <div className="mt-1 font-numbers text-white" data-testid="bonus-balance">
-                      PKR {balance?.bonus_balance?.toLocaleString() || '0'}
-                    </div>
-                  )}
-                </div>
+              <div className="mt-4 text-sm text-white/55">
+                Single wallet view (PKR).
               </div>
             </div>
           </div>
