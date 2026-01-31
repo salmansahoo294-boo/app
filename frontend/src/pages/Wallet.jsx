@@ -54,6 +54,7 @@ export default function Wallet() {
         paymentAPI.getWithdrawals({ limit: 20 }),
       ]);
       setBalance(balanceRes.data);
+      setWagering(wageringRes.data);
       setDeposits(depositsRes.data);
       setWithdrawals(withdrawalsRes.data);
     } catch (error) {
