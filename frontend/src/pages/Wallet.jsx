@@ -252,6 +252,16 @@ export default function Wallet() {
             <h3 className="font-primary text-white text-lg">Withdraw</h3>
             <p className="text-sm text-white/60 mt-1">Request withdrawal to your JazzCash account (PKR).</p>
 
+            {wagering?.has_active_wagering ? (
+              <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                <div className="text-xs uppercase tracking-widest text-white/50">Wagering Required</div>
+                <div className="mt-2 text-sm text-white/70">
+                  Remaining wagering: <span className="font-numbers text-white">Rs {Number(wagering.remaining || 0).toLocaleString()}</span>
+                </div>
+                <div className="mt-2 text-xs text-white/45">Complete wagering requirements to withdraw.</div>
+              </div>
+            ) : null}
+
             <form onSubmit={handleWithdraw} className="space-y-4 mt-6">
               <div className="space-y-2">
                 <Label htmlFor="withdraw-amount" className="text-white">Amount (PKR)</Label>
