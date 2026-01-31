@@ -62,12 +62,10 @@ async def approve_deposit_apply_promotions(db, deposit: Dict[str, Any], admin_id
 
     # First deposit lifetime bonus 108% (strict)
     if promo_key == "first_deposit_108":
-        # Eligible only if user flag says eligible AND it is their first-ever deposit request (already consumed at request time).
-        if user.get("first_deposit_108_used"):
-            bonus_amount = 0.0
-        else:
-            cfg = await get_first_deposit_108_config(db)
-            bonus_amount = float(compute_first_deposit_108_bonus(deposit_amount, cfg))
+        # If the deposit has this promotion key, it means it was eligible when created
+        # The eligibility was already consumed at deposit creation time
+        cfg = await get_first_deposit_108_config(db)
+        bonus_amount = float(compute_first_deposit_108_bonus(deposit_amount, cfg))
 
     # Referral bonus etc will be applied elsewhere
 
